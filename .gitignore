@@ -1,0 +1,5 @@
+# Ignore system files
+nul
+
+# Ignore Composer dependencies
+/vendor

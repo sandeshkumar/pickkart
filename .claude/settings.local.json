@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c:*)",
+      "Bash(dir:*)",
+      "Bash(composer:*)",
+      "Bash(d:/xampp/mysql/bin/mysql:*)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(del \"d:\\\\xampp\\\\htdocs\\\\zedkart\\\\check_seed.php\")",
+      "Bash(timeout:*)",
+      "Bash(findstr:*)",
+      "Bash(\"d:\\\\xampp\\\\htdocs\\\\zedkart\\\\test_urls.php\" << 'PHPEOF'\n<?php\n$urls = [\n    'http://127.0.0.1:8001/',\n    'http://127.0.0.1:8001/products',\n    'http://127.0.0.1:8001/login',\n    'http://127.0.0.1:8001/register',\n    'http://127.0.0.1:8001/cart',\n];\n\n$errorPatterns = [\n    'ErrorException',\n    'Stack trace',\n    'Whoops',\n    'syntax error',\n    'ParseError',\n    'Undefined variable',\n    'Fatal error',\n    'UnexpectedValueException',\n    'BadMethodCallException',\n    'Illuminate\\\\\\\\\\\\\\\\',\n    'Server Error',\n    'Exception in',\n    'error:',\n];\n\necho str_repeat\\('=', 70\\) . \"\\\\n\";\necho \"  URL Health Check\\\\n\";\necho str_repeat\\('=', 70\\) . \"\\\\n\\\\n\";\n\n$allPassed = true;\n\nforeach \\($urls as $url\\) {\n    echo \"URL: $url\\\\n\";\n    echo str_repeat\\('-', 70\\) . \"\\\\n\";\n\n    $ch = curl_init\\($url\\);\n    curl_setopt\\($ch, CURLOPT_RETURNTRANSFER, true\\);\n    curl_setopt\\($ch, CURLOPT_TIMEOUT, 15\\);\n    curl_setopt\\($ch, CURLOPT_FOLLOWLOCATION, true\\);\n    curl_setopt\\($ch, CURLOPT_HEADER, false\\);\n\n    $body = curl_exec\\($ch\\);\n    $httpCode = curl_getinfo\\($ch, CURLINFO_HTTP_CODE\\);\n    $curlError = curl_error\\($ch\\);\n    curl_close\\($ch\\);\n\n    if \\($curlError\\) {\n        echo \"  STATUS:  FAIL \\(curl error: $curlError\\)\\\\n\\\\n\";\n        $allPassed = false;\n        continue;\n    }\n\n    // HTTP status\n    if \\($httpCode === 200\\) {\n        echo \"  HTTP:    200 OK\\\\n\";\n    } else {\n        echo \"  HTTP:    $httpCode \\(UNEXPECTED\\)\\\\n\";\n        $allPassed = false;\n    }\n\n    // Check for PHP error strings\n    $foundErrors = [];\n    foreach \\($errorPatterns as $pattern\\) {\n        if \\(stripos\\($body, str_replace\\('\\\\\\\\\\\\\\\\', '\\\\\\\\', $pattern\\)\\) !== false\\) {\n            $foundErrors[] = $pattern;\n        }\n    }\n\n    if \\(empty\\($foundErrors\\)\\) {\n        echo \"  ERRORS:  None detected\\\\n\";\n        echo \"  RESULT:  PASS\\\\n\";\n    } else {\n        echo \"  ERRORS:  Found -> \" . implode\\(', ', $foundErrors\\) . \"\\\\n\";\n        echo \"  RESULT:  FAIL\\\\n\";\n        $allPassed = false;\n\n        // Extract a snippet around the first error for context\n        $firstErr = str_replace\\('\\\\\\\\\\\\\\\\', '\\\\\\\\', $foundErrors[0]\\);\n        $pos = stripos\\($body, $firstErr\\);\n        $start = max\\(0, $pos - 100\\);\n        $snippet = substr\\($body, $start, 300\\);\n        $snippet = strip_tags\\($snippet\\);\n        $snippet = preg_replace\\('/\\\\s+/', ' ', $snippet\\);\n        echo \"  SNIPPET: ...\" . trim\\($snippet\\) . \"...\\\\n\";\n    }\n\n    $bodyLen = strlen\\($body\\);\n    echo \"  SIZE:    $bodyLen bytes\\\\n\\\\n\";\n}\n\necho str_repeat\\('=', 70\\) . \"\\\\n\";\necho $allPassed ? \"  ALL PAGES PASSED\\\\n\" : \"  SOME PAGES FAILED - SEE ABOVE\\\\n\";\necho str_repeat\\('=', 70\\) . \"\\\\n\";\nPHPEOF)",
+      "Bash(for f in storage/framework/views/*.php)",
+      "Bash(do php -l \"$f\")",
+      "Bash(done)"
+    ]
+  }
+}

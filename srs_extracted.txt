@@ -1,0 +1,836 @@
+SOFTWARE REQUIREMENT
+SPECIFICATION (SRS)
+E-Commerce Platform
+Shopify-Class Multi-Category Online Marketplace
+Document Version: 1.0
+Date: February 9, 2026
+Status: Draft
+Table of Contents
+1. Introduction
+1.1 Purpose
+This Software Requirements Specification (SRS) document defines the functional, non-functional, and interface requirements for an industry-standard, Shopify-class e-commerce platform. The platform will serve as a full-featured online marketplace supporting twelve product categories: Electronics, Beauty, Toys, Gadgets, Sports, Books, Gardening, Furniture, Shoes, Clothing, Tools, and Homemade goods.
+1.2 Scope
+The system will provide end-to-end e-commerce functionality including a customer-facing storefront, a seller/admin dashboard, inventory management, order processing, payment integration, shipping and logistics, and analytics. The platform will be designed for scalability, security, and a seamless user experience across web and mobile.
+1.3 Definitions & Abbreviations
+Term
+Definition
+SRS
+Software Requirements Specification
+SKU
+Stock Keeping Unit — unique product identifier
+PDP
+Product Detail Page
+PLP
+Product Listing Page
+CMS
+Content Management System
+API
+Application Programming Interface
+CDN
+Content Delivery Network
+PCI-DSS
+Payment Card Industry Data Security Standard
+RBAC
+Role-Based Access Control
+SSR
+Server-Side Rendering
+PWA
+Progressive Web Application
+1.4 Document Conventions
+Requirements are identified using the format [MODULE-NNN]. Priority is indicated as P1 (Must Have), P2 (Should Have), or P3 (Nice to Have) following MoSCoW prioritization.
+1.5 Intended Audience
+Project Managers and Stakeholders
+UI/UX Designers
+Frontend and Backend Developers
+QA Engineers and Testers
+DevOps and Infrastructure Teams
+Third-Party Integration Partners
+2. Overall Description
+2.1 Product Perspective
+The platform will be a cloud-native, modular monolith e-commerce solution built on the Laravel PHP framework. It draws inspiration from Shopify’s feature set but is custom-built to accommodate a curated set of 12 product categories with category-specific attributes, filters, and browsing experiences. Laravel’s rich ecosystem (Eloquent ORM, Blade/Livewire, Queues, Scout, Sanctum, Horizon, Forge) provides a robust foundation for rapid development.
+2.2 Product Categories
+The platform will support the following twelve product categories, each with tailored attributes and filter options:
+#
+Category
+Sample Attributes
+Special Considerations
+1
+Electronics
+Brand, Warranty, Voltage, Connectivity
+Extended warranty options, tech specs display
+2
+Beauty
+Skin Type, Ingredients, Volume, Expiry
+Ingredient list, allergen warnings, shade selection
+3
+Toys
+Age Group, Material, Safety Cert.
+Age suitability badges, safety compliance labels
+4
+Gadgets
+Compatibility, Battery, Connectivity
+Comparison charts, unboxing media
+5
+Sports
+Sport Type, Size, Material, Gender
+Size guides, performance metrics
+6
+Books
+Author, ISBN, Genre, Format, Language
+Preview pages, author profiles, digital format
+7
+Gardening
+Plant Type, Season, Indoor/Outdoor
+Care instructions, growing guides
+8
+Furniture
+Material, Dimensions, Weight, Assembly
+AR room preview, delivery logistics
+9
+Shoes
+Size, Color, Material, Width, Gender
+Size conversion charts, fit recommendations
+10
+Clothing
+Size, Color, Material, Fit, Gender
+Size guides, virtual try-on, fabric details
+11
+Tools
+Power Source, Material, Use Case
+Safety data sheets, usage guides
+12
+Homemade
+Artisan Name, Materials, Customizable
+Artisan profiles, custom order workflows
+2.3 User Classes
+User Class
+Description
+Key Capabilities
+Guest Visitor
+Unauthenticated users browsing the store
+Browse, search, view products, add to cart
+Registered Customer
+Authenticated users with an account
+All guest abilities + checkout, wishlist, order history, reviews
+Seller / Vendor
+Merchants listing and managing products
+Product CRUD, inventory, orders, payouts, storefront customization
+Admin
+Platform administrators
+Full system management, user moderation, analytics, configuration
+Super Admin
+System-level administrator
+All admin abilities + role management, system settings, billing
+2.4 Operating Environment
+Web Application: Responsive design supporting Chrome, Firefox, Safari, Edge (latest 2 versions)
+Mobile: Native-like experience via PWA; optional native apps (iOS 15+, Android 10+)
+Server: Laravel (PHP 8.2+) on Nginx/Apache, cloud-hosted (AWS / GCP / DigitalOcean) with auto-scaling via Laravel Forge or Vapor (serverless)
+Database: MySQL/PostgreSQL via Laravel Eloquent ORM for transactional data; Redis for sessions, cache, queues
+Search Engine: Laravel Scout with Elasticsearch, Meilisearch, or Algolia driver for product search and faceted filtering
+2.5 Design & Implementation Constraints
+Must comply with PCI-DSS Level 1 for payment processing
+Must comply with GDPR, CCPA, and applicable data privacy regulations
+All pages must achieve Lighthouse Performance score of 90+ on mobile
+API response times must be under 200ms at the 95th percentile
+System must support 99.9% uptime SLA
+2.6 Assumptions & Dependencies
+Payment processing will be handled via third-party providers (Stripe, Razorpay, PayPal)
+Email and SMS notifications will use third-party services (SendGrid, Twilio)
+Shipping rate calculation will integrate with carrier APIs (FedEx, DHL, local couriers)
+Product images will be served through a CDN for optimal load times
+3. Functional Requirements
+3.1 User Authentication & Account Management
+Req ID
+Requirement
+Priority
+AUTH-001
+Users can register via email, phone number, or social login (Google, Facebook, Apple)
+P1
+AUTH-002
+Email verification with OTP or magic link upon registration
+P1
+AUTH-003
+Secure login with email/password, supporting multi-factor authentication (MFA)
+P1
+AUTH-004
+Password reset flow via email with time-limited secure tokens
+P1
+AUTH-005
+User profile management: name, avatar, address book, phone, communication preferences
+P1
+AUTH-006
+Session management with Laravel Sanctum (SPA tokens) or Passport (OAuth2), with configurable expiry
+P1
+AUTH-007
+Role-based access control (RBAC) with granular permissions for Admin, Seller, Customer
+P1
+AUTH-008
+Account deactivation and data export per GDPR right to portability
+P2
+AUTH-009
+Login activity log and suspicious activity alerts
+P2
+AUTH-010
+Single Sign-On (SSO) support for enterprise seller accounts
+P3
+3.2 Product Catalog & Management
+Req ID
+Requirement
+Priority
+CAT-001
+Products organized in hierarchical categories (12 top-level with unlimited sub-categories)
+P1
+CAT-002
+Each product supports: title, description (rich text), images (up to 10), video, price, compare-at price, SKU, barcode
+P1
+CAT-003
+Product variants (size, color, material) with independent stock, pricing, and images per variant
+P1
+CAT-004
+Category-specific custom attributes and filter facets (see Section 2.2 for details)
+P1
+CAT-005
+Bulk product import/export via CSV and Excel with validation and error reporting
+P1
+CAT-006
+Product tags, collections, and labels (New, Sale, Bestseller, Limited Edition)
+P1
+CAT-007
+SEO fields per product: meta title, meta description, URL slug, Open Graph data
+P2
+CAT-008
+Product comparison feature within the same category (up to 4 products side-by-side)
+P2
+CAT-009
+Digital product support with secure file delivery (eBooks, software, guides)
+P2
+CAT-010
+Product bundles and kits with combined pricing and inventory tracking
+P2
+CAT-011
+Scheduled product publishing (set future publish and unpublish dates)
+P3
+CAT-012
+AR/3D product preview for Furniture and Clothing categories
+P3
+3.3 Search & Discovery
+Req ID
+Requirement
+Priority
+SRCH-001
+Full-text search with autocomplete, typo tolerance, and synonym support
+P1
+SRCH-002
+Faceted filtering by category, price range, brand, rating, attributes, availability
+P1
+SRCH-003
+Sort options: Relevance, Price (Low-High / High-Low), Newest, Bestselling, Rating
+P1
+SRCH-004
+Search results with thumbnail, price, rating, and quick-add-to-cart
+P1
+SRCH-005
+Category-specific filter panels (e.g., shoe size for Shoes, age group for Toys)
+P1
+SRCH-006
+Recently viewed products and search history per user
+P2
+SRCH-007
+AI-powered product recommendations ("Customers also bought", "You may also like")
+P2
+SRCH-008
+Visual/image-based product search
+P3
+3.4 Shopping Cart & Checkout
+Req ID
+Requirement
+Priority
+CART-001
+Persistent shopping cart (survives session expiry for logged-in users; local storage for guests)
+P1
+CART-002
+Cart supports quantity adjustment, item removal, variant selection, and estimated totals
+P1
+CART-003
+Apply coupon codes and promotional discounts at cart level
+P1
+CART-004
+Guest checkout (without requiring account creation)
+P1
+CART-005
+Multi-step checkout: Shipping Address → Shipping Method → Payment → Review → Confirm
+P1
+CART-006
+Address auto-complete and validation using Google Places or similar API
+P1
+CART-007
+Real-time shipping rate calculation based on address, weight, and carrier
+P1
+CART-008
+Tax calculation engine supporting multi-region and multi-country tax rules
+P1
+CART-009
+Save cart / Save for later functionality
+P2
+CART-010
+Express checkout (Buy Now with saved payment and address)
+P2
+CART-011
+Abandoned cart recovery with automated email reminders
+P2
+CART-012
+Split shipment support for multi-seller orders
+P2
+3.5 Payment Processing
+Req ID
+Requirement
+Priority
+PAY-001
+Credit/Debit card payments via Stripe or Razorpay with tokenization
+P1
+PAY-002
+UPI, Net Banking, and Wallet payments (region-specific)
+P1
+PAY-003
+PayPal integration for international transactions
+P1
+PAY-004
+PCI-DSS compliant payment flow — no raw card data stored on servers
+P1
+PAY-005
+Order confirmation with payment receipt via email
+P1
+PAY-006
+Refund processing (full and partial) back to original payment method
+P1
+PAY-007
+Buy Now, Pay Later (BNPL) integration (Klarna, Afterpay, or equivalent)
+P2
+PAY-008
+Multi-currency support with automatic exchange rate conversion
+P2
+PAY-009
+Invoice generation in PDF format for every order
+P2
+PAY-010
+Subscription and recurring payment support for eligible products
+P3
+3.6 Order Management
+Req ID
+Requirement
+Priority
+ORD-001
+Order lifecycle: Placed → Confirmed → Processing → Shipped → Delivered → Completed / Returned
+P1
+ORD-002
+Real-time order status tracking with timeline view for customers
+P1
+ORD-003
+Order confirmation email and SMS notifications at each status change
+P1
+ORD-004
+Order detail page showing items, quantities, prices, taxes, shipping, payment status
+P1
+ORD-005
+Order cancellation by customer (before shipping) with automatic refund initiation
+P1
+ORD-006
+Return and exchange request workflow with reason selection and approval flow
+P1
+ORD-007
+Seller dashboard for order fulfillment: view orders, print labels, mark shipped
+P1
+ORD-008
+Admin ability to manually create, edit, and cancel orders
+P2
+ORD-009
+Order notes and internal communication between admin and seller per order
+P2
+ORD-010
+Bulk order processing and batch label printing
+P3
+3.7 Inventory Management
+Req ID
+Requirement
+Priority
+INV-001
+Real-time stock tracking at SKU and variant level
+P1
+INV-002
+Low stock and out-of-stock alerts via email and dashboard notifications
+P1
+INV-003
+Automatic inventory deduction upon order placement and restoration upon cancellation
+P1
+INV-004
+Multi-warehouse / multi-location inventory support
+P2
+INV-005
+Inventory history log with audit trail
+P2
+INV-006
+Back-in-stock notification signup for customers
+P2
+INV-007
+Bulk stock update via CSV import
+P2
+INV-008
+Inventory forecasting based on sales velocity
+P3
+3.8 Seller / Vendor Management
+Req ID
+Requirement
+Priority
+SELL-001
+Seller registration and onboarding with KYC document upload and verification
+P1
+SELL-002
+Seller dashboard with sales analytics, order management, and product management
+P1
+SELL-003
+Commission/fee structure configuration per seller and per category
+P1
+SELL-004
+Automated seller payout processing on configurable schedule
+P1
+SELL-005
+Seller storefront page with branding, about section, ratings, and product listing
+P2
+SELL-006
+Seller performance metrics: fulfillment rate, return rate, response time, rating
+P2
+SELL-007
+Seller-level coupon and promotion creation
+P2
+SELL-008
+Seller support ticketing system
+P3
+3.9 Promotions & Discounts
+Req ID
+Requirement
+Priority
+PROMO-001
+Coupon codes: percentage, fixed amount, free shipping, buy-X-get-Y
+P1
+PROMO-002
+Coupon rules: minimum order value, category restriction, usage limits, expiry date
+P1
+PROMO-003
+Flash sales and time-limited deals with countdown timers
+P1
+PROMO-004
+Automatic discounts (e.g., 10% off orders over $100) without coupon code
+P2
+PROMO-005
+Loyalty points program with earn/redeem mechanics
+P3
+PROMO-006
+Referral program with tracking and reward distribution
+P3
+3.10 Ratings & Reviews
+Req ID
+Requirement
+Priority
+REV-001
+Star rating (1–5) and text review submission by verified purchasers
+P1
+REV-002
+Photo and video upload with reviews
+P1
+REV-003
+Review moderation queue with approve/reject workflow for admin
+P1
+REV-004
+Aggregate rating calculation displayed on PDP and PLP
+P1
+REV-005
+Helpful/unhelpful voting on reviews
+P2
+REV-006
+Seller response capability on product reviews
+P2
+REV-007
+Review analytics: sentiment distribution, keyword trends
+P3
+3.11 Content Management System (CMS)
+Req ID
+Requirement
+Priority
+CMS-001
+Homepage builder with drag-and-drop section management (banners, carousels, grids)
+P1
+CMS-002
+Static page creation (About Us, Contact, FAQ, Terms, Privacy Policy)
+P1
+CMS-003
+Blog/content section for SEO and customer engagement
+P2
+CMS-004
+Customizable navigation menus (header, footer, sidebar)
+P1
+CMS-005
+Banner management system with scheduling and A/B testing
+P2
+CMS-006
+Landing page builder for marketing campaigns
+P3
+3.12 Notifications & Communication
+Req ID
+Requirement
+Priority
+NOTIF-001
+Transactional email notifications (order placed, shipped, delivered, refunded)
+P1
+NOTIF-002
+SMS notifications for critical order updates
+P1
+NOTIF-003
+Push notifications for mobile app users (web push for PWA)
+P2
+NOTIF-004
+In-app notification center with read/unread status
+P2
+NOTIF-005
+Marketing email campaigns with audience segmentation
+P2
+NOTIF-006
+WhatsApp Business API integration for order updates
+P3
+3.13 Admin Dashboard & Analytics
+Req ID
+Requirement
+Priority
+ADMIN-001
+Dashboard overview: total orders, revenue, active users, top products (today/week/month/custom)
+P1
+ADMIN-002
+User management: view, edit, ban, impersonate customer accounts
+P1
+ADMIN-003
+Product and category management with bulk actions
+P1
+ADMIN-004
+Order management and dispute resolution tools
+P1
+ADMIN-005
+Sales analytics with charts: revenue trends, conversion funnel, AOV, category breakdown
+P1
+ADMIN-006
+Traffic analytics: page views, bounce rate, traffic sources, device breakdown
+P2
+ADMIN-007
+Export reports to CSV, Excel, and PDF
+P2
+ADMIN-008
+Audit log of all admin actions with timestamps and user attribution
+P2
+ADMIN-009
+Configurable admin roles and permissions
+P1
+ADMIN-010
+Real-time system health monitoring and alerts
+P3
+4. Non-Functional Requirements
+4.1 Performance
+Req ID
+Requirement
+Target
+PERF-001
+Page load time (Largest Contentful Paint)
+< 2.5 seconds on 4G mobile
+PERF-002
+Time to Interactive (TTI)
+< 3.5 seconds on mobile
+PERF-003
+API response time (95th percentile)
+< 200ms
+PERF-004
+Concurrent users supported without degradation
+10,000+
+PERF-005
+Search query response time
+< 100ms
+PERF-006
+Image optimization with lazy loading and WebP/AVIF
+80%+ size reduction
+PERF-007
+Database query response (95th percentile)
+< 50ms
+4.2 Security
+Req ID
+Requirement
+Priority
+SEC-001
+HTTPS/TLS 1.3 enforced on all endpoints
+P1
+SEC-002
+OWASP Top 10 protection: SQL injection, XSS, CSRF, etc.
+P1
+SEC-003
+Data encryption at rest (AES-256) and in transit (TLS 1.3)
+P1
+SEC-004
+PCI-DSS Level 1 compliance for payment data handling
+P1
+SEC-005
+Rate limiting and DDoS protection on all public APIs
+P1
+SEC-006
+Regular automated security scanning (SAST/DAST) and annual penetration testing
+P2
+SEC-007
+IP-based geoblocking and fraud detection for suspicious transactions
+P2
+SEC-008
+Content Security Policy (CSP) headers on all pages
+P2
+SEC-009
+GDPR/CCPA compliant data handling: consent management, data deletion, export
+P1
+4.3 Scalability & Reliability
+Req ID
+Requirement
+Target
+SCAL-001
+Horizontal auto-scaling based on CPU, memory, and request volume
+Dynamic
+SCAL-002
+System uptime SLA
+99.9%
+SCAL-003
+Recovery Point Objective (RPO)
+< 1 hour
+SCAL-004
+Recovery Time Objective (RTO)
+< 4 hours
+SCAL-005
+Database read replicas for high-traffic read operations
+Multi-region
+SCAL-006
+CDN for static assets and media with edge caching
+Global
+SCAL-007
+Laravel Queues + Horizon for async operations (emails, reports, exports)
+Auto-scale
+4.4 Accessibility
+WCAG 2.1 Level AA compliance across all customer-facing pages
+Full keyboard navigation support
+Screen reader compatibility (ARIA labels, semantic HTML)
+Color contrast ratios meeting AA standards (4.5:1 for normal text)
+Alt text for all product images
+4.5 Internationalization (i18n)
+Multi-language support with language detection and manual switching
+RTL (Right-to-Left) layout support for Arabic, Hebrew, etc.
+Locale-specific date, time, number, and currency formatting
+Translatable CMS content and product descriptions
+5. System Architecture Overview
+5.1 Architecture Style
+The platform will follow a modular monolith architecture built on the Laravel PHP framework, deployed on containerized infrastructure (Docker + Laravel Sail). Internal modules communicate via Laravel Events and Service classes for synchronous calls, and Laravel Queues (Redis/SQS) for asynchronous workflows. The architecture can evolve into microservices as scale demands.
+5.2 Core Services
+Service
+Responsibility
+Tech Stack
+API Layer
+Request routing, authentication, rate limiting, API versioning
+Laravel API Routes + Laravel Sanctum
+Auth Module
+User registration, login, sessions, MFA, RBAC
+Laravel + Sanctum / Passport
+Product Module
+Catalog, categories, variants, search indexing
+Laravel Scout + Elasticsearch
+Cart Module
+Cart state management, pricing calculations
+Laravel + Redis
+Order Module
+Order lifecycle, status tracking, fulfillment
+Laravel + Eloquent ORM
+Payment Module
+Payment processing, refunds, reconciliation
+Laravel (PCI-scoped)
+Inventory Module
+Stock management, warehouse allocation
+Laravel + Queue Workers
+Notification Module
+Email, SMS, push notification orchestration
+Laravel + Queues (Redis/SQS)
+CMS Module
+Page builder, banners, content management
+Laravel + Filament CMS
+Analytics Module
+Dashboards, reporting, data pipelines
+Laravel + ClickHouse / Metabase
+Media Module
+Image upload, processing, CDN integration
+Laravel + Spatie Media Library + S3
+5.3 Frontend Architecture
+Frontend: Blade Templates + Livewire for interactive components; optional Inertia.js + Vue.js/React SPA
+State Management: Livewire for server-driven state; Alpine.js for lightweight UI interactions
+Styling: Tailwind CSS with a custom design system and Blade component library
+Mobile: PWA with offline support; optional Flutter or React Native apps for iOS and Android
+5.4 Database Strategy
+Database
+Usage
+Justification
+MySQL / PostgreSQL
+Users, orders, transactions, inventory
+Laravel Eloquent ORM, ACID compliance, migrations
+MongoDB
+Product catalog, CMS content
+Flexible schema for varied product attributes; or use Laravel JSON columns in MySQL
+Redis
+Sessions, cart, caching, rate limiting via Laravel Cache/Session drivers
+Sub-millisecond reads, TTL support
+Elasticsearch
+Product search, autocomplete, analytics
+Full-text search, faceted filtering
+S3-compatible
+Product images, media, documents
+Laravel Filesystem (Flysystem) with S3 driver + CDN
+6. Third-Party Integrations
+Integration
+Provider Options
+Purpose
+Payment Gateway
+Stripe, Razorpay, PayPal, Adyen
+Payment processing and reconciliation
+Shipping & Logistics
+FedEx, DHL, Shiprocket, EasyPost
+Shipping rates, label generation, tracking
+Email Service
+SendGrid, AWS SES, Postmark
+Transactional and marketing emails
+SMS Service
+Twilio, MSG91
+OTP, order notifications
+Address Validation
+Google Places API, Loqate
+Address auto-complete and verification
+Tax Calculation
+TaxJar, Avalara
+Multi-region tax compliance
+Analytics
+Google Analytics 4, Mixpanel
+User behavior tracking and funnel analysis
+CDN
+CloudFront, Cloudflare
+Media delivery and edge caching
+Error Monitoring
+Sentry, Datadog
+Application error tracking and alerting
+CI/CD
+GitHub Actions, Laravel Forge / Envoyer
+Automated testing, build, deployment, zero-downtime
+7. UI/UX Requirements
+7.1 Design Principles
+Mobile-first responsive design with breakpoints for mobile, tablet, and desktop
+Clean, modern aesthetic with consistent typography, spacing, and color system
+Maximum 3-click rule to reach any product from the homepage
+Skeleton loading states for all data-dependent components
+Micro-interactions and animations for engagement (add to cart, wishlist, transitions)
+Dark mode support as a user-selectable preference
+7.2 Key Pages & Flows
+Page / Flow
+Key Elements
+Homepage
+Hero banner carousel, category grid, trending products, deals section, new arrivals, testimonials
+Product Listing Page (PLP)
+Category filters (sidebar/top), sort controls, grid/list toggle, pagination or infinite scroll, quick view
+Product Detail Page (PDP)
+Image gallery with zoom, variant selector, price/discount, add to cart/wishlist, reviews tab, related products
+Cart Page
+Item list with quantities, variant summary, coupon input, price breakdown, checkout CTA
+Checkout Flow
+Address form (saved addresses), shipping options, payment method selection, order summary, confirmation
+User Account
+Profile settings, order history with status, addresses, wishlist, saved payments, notifications
+Seller Dashboard
+Overview stats, product management, order queue, inventory alerts, payouts, settings
+Admin Dashboard
+KPI cards, charts, user management, orders, products, promotions, settings, audit logs
+8. Testing Requirements
+Test Type
+Scope
+Tools
+Unit Testing
+Individual functions and components (80%+ code coverage)
+PHPUnit, Laravel Dusk
+Integration Testing
+API endpoint testing, database operations
+Laravel HTTP Tests, Postman/Newman
+End-to-End Testing
+Critical user journeys (search, cart, checkout, payment)
+Cypress, Playwright
+Performance Testing
+Load testing, stress testing, spike testing
+k6, Artillery, Lighthouse CI
+Security Testing
+Vulnerability scanning, penetration testing
+OWASP ZAP, Snyk, manual pen test
+Accessibility Testing
+WCAG compliance verification
+axe-core, Lighthouse, manual audit
+Cross-Browser Testing
+Rendering and functionality across browsers
+BrowserStack, Sauce Labs
+Mobile Testing
+Responsive layout, touch interactions, PWA functionality
+Real device lab, Appium
+9. Deployment & DevOps
+Infrastructure as Code (IaC) using Terraform or Pulumi
+Containerized deployment with Docker (Laravel Sail for dev) and optional Kubernetes for production orchestration
+CI/CD pipeline: lint (Pint/PHPStan) → test (PHPUnit) → build → staging deploy → manual approval → production deploy via Forge/Envoyer
+Blue-green or canary deployment strategy for zero-downtime releases
+Environment parity: Development, Staging, Production with identical configurations
+Automated database migrations with Laravel Migrations and rollback capability
+Centralized logging (Laravel Log channels + ELK stack / Datadog), Laravel Telescope for debugging, and metrics dashboards
+Automated backup: database snapshots every 6 hours, media daily, with cross-region replication
+10. Project Milestones (Indicative)
+Phase
+Milestone
+Duration
+Key Deliverables
+Phase 1
+Foundation & Core
+Weeks 1–8
+Architecture setup, Auth, Product Catalog, Basic Search, Admin CRUD
+Phase 2
+Commerce Engine
+Weeks 9–16
+Cart, Checkout, Payment Integration, Order Management, Inventory
+Phase 3
+Seller & CMS
+Weeks 17–22
+Seller Dashboard, CMS/Page Builder, Notifications, Reviews
+Phase 4
+Polish & Scale
+Weeks 23–28
+Performance optimization, Security hardening, Analytics, SEO, Accessibility
+Phase 5
+Launch Prep
+Weeks 29–32
+UAT, Load testing, Pen testing, Staging validation, Go-live checklist
+Phase 6
+Post-Launch
+Weeks 33+
+Monitoring, Bug fixes, Feature iteration, Loyalty/Referral programs
+11. Appendix
+11.1 Revision History
+Version
+Date
+Author
+Changes
+1.0
+2026-02-09
+Project Team
+Initial draft — complete SRS
+11.2 Approval Sign-Off
+Role
+Name
+Signature
+Date
+Project Manager
+Technical Lead
+Product Owner
+QA Lead
+— End of Document —
