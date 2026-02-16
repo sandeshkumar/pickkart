@@ -179,7 +179,9 @@
                 'compare_at_price' => $v->compare_at_price ? (float) $v->compare_at_price : null,
                 'stock' => (int) $v->stock_quantity,
                 'name' => $v->display_name,
+                'image' => $v->image,
             ])->values();
+            $imagePaths = ($product->images ?? collect())->pluck('path')->values();
             $productOptions = $product->options ?? [];
             $initSelections = collect($productOptions)->mapWithKeys(fn($opt, $i) => ['option'.($i+1) => ''])->all();
         @endphp
@@ -191,6 +193,7 @@
             options: @js($productOptions),
             variants: @js($variantJson),
             selections: @js($initSelections),
+            imagePaths: @js($imagePaths),
             currencySymbol: @js(currency_symbol()),
             get selectedVariant() {
                 if (!this.options || this.options.length === 0) return null;
@@ -240,6 +243,9 @@
                 }
                 return null;
             }
+        }" x-effect="if (selectedVariant && selectedVariant.image) {
+            let idx = imagePaths.indexOf(selectedVariant.image);
+            if (idx !== -1) selectedImage = idx;
         }">
             <div class="grid md:grid-cols-2 gap-0">
 

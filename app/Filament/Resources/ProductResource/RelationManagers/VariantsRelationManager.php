@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ProductResource\RelationManagers;
 
-use App\Models\ProductVariant;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -73,6 +72,20 @@ class VariantsRelationManager extends RelationManager
                     ->default(0)
                     ->minValue(0),
 
+                Forms\Components\Select::make('image')
+                    ->label('Gallery Image')
+                    ->options(function () {
+                        $product = $this->getOwnerRecord();
+                        $images = $product->images()->orderBy('sort_order')->get();
+
+                        return $images->mapWithKeys(fn ($img, $i) => [
+                            $img->path => 'Image ' . ($i + 1) . ($img->is_primary ? ' (Primary)' : ''),
+                        ])->toArray();
+                    })
+                    ->placeholder('No image linked')
+                    ->helperText('Link this variant to a product gallery image.')
+                    ->columnSpanFull(),
+
                 Forms\Components\Toggle::make('is_active')
                     ->label('Active')
                     ->default(true),
@@ -91,6 +104,13 @@ class VariantsRelationManager extends RelationManager
 
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Image')
+                    ->disk('public')
+                    ->size(40)
+                    ->square()
+                    ->defaultImageUrl(fn () => 'https://placehold.co/40x40/f3f4f6/9ca3af?text=-'),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
