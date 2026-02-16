@@ -38,7 +38,8 @@ class BannerResource extends Resource
                         Forms\Components\FileUpload::make('image')
                             ->image()
                             ->directory('banners')
-                            ->required(),
+                            ->required()
+                            ->helperText('Hero: 1920 x 500px | Sidebar: 400 x 300px | Footer: 1920 x 300px. Use JPG/PNG for best quality.'),
 
                         Forms\Components\TextInput::make('link')
                             ->url()
@@ -105,9 +106,8 @@ class BannerResource extends Resource
                     ->label('Order')
                     ->sortable(),
 
-                Tables\Columns\IconColumn::make('is_active')
-                    ->label('Active')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Active'),
 
                 Tables\Columns\TextColumn::make('starts_at')
                     ->dateTime()
