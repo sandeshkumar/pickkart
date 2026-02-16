@@ -27,7 +27,7 @@
 
 ### Accessing the Admin Panel
 
-- **URL:** `https://yourdomain.com/admin`
+- **URL:** `https://pickkart.co.in/admin`
 - Login with your admin email and password.
 - Only users with **super-admin** or **admin** roles can access the panel.
 
