@@ -588,7 +588,7 @@
     </footer>
 
     {{-- Toast Notification System --}}
-    <div x-data="toastSystem()" x-init="init()" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3" style="pointer-events: none;">
+    <div x-data="toastSystem()" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3" style="pointer-events: none;">
         <template x-for="toast in toasts" :key="toast.id">
             <div x-show="toast.visible"
                  x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
