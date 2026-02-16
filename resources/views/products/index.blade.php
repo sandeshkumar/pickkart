@@ -376,7 +376,10 @@
                                         @endif
                                     </div>
                                     <div class="flex items-center gap-3 mt-3">
-                                        @php $hasVariants = $product->has_active_variants ?? $product->hasVariants(); @endphp
+                                        @php
+                                            $hasVariants = $product->has_active_variants ?? $product->hasVariants();
+                                            $isWishlisted = auth()->check() && auth()->user()->wishlists()->where('product_id', $product->id)->exists();
+                                        @endphp
                                         @if($hasVariants)
                                             <a href="{{ route('products.show', $product->slug) }}" class="btn-gradient-blue text-sm font-heading font-semibold px-4 py-2 rounded-lg inline-flex items-center gap-1">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -397,8 +400,8 @@
                                             <form action="{{ route('wishlist.toggle') }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                                <button type="submit" class="border border-gray-200 text-gray-600 hover:text-red-500 hover:border-red-300 p-2 rounded-lg transition-colors" title="Add to Wishlist">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                                <button type="submit" class="border {{ $isWishlisted ? 'border-red-300 text-red-500' : 'border-gray-200 text-gray-600 hover:text-red-500 hover:border-red-300' }} p-2 rounded-lg transition-colors" title="{{ $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' }}">
+                                                    <svg class="w-5 h-5" fill="{{ $isWishlisted ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                                                 </button>
                                             </form>
                                         @else
