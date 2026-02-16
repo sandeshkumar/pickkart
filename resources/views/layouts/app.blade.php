@@ -218,53 +218,40 @@
                     <span class="text-2xl font-bold text-primary-700 hidden sm:block">Pick<span class="text-accent-500">Kart</span></span>
                 </a>
 
-                {{-- Search Bar --}}
-                <div class="flex-1 max-w-2xl hidden md:block" x-data="{
-                    focused: false,
-                    query: '{{ request('search') }}',
-                    recentSearches: JSON.parse(localStorage.getItem('pk_recent_searches') || '[]'),
-                    get showSuggestions() { return this.focused && this.recentSearches.length > 0 && !this.query; },
-                    saveSearch() {
-                        if (!this.query.trim()) return;
-                        let searches = this.recentSearches.filter(s => s !== this.query.trim());
-                        searches.unshift(this.query.trim());
-                        searches = searches.slice(0, 5);
-                        localStorage.setItem('pk_recent_searches', JSON.stringify(searches));
-                    },
-                    clearRecent() {
-                        this.recentSearches = [];
-                        localStorage.removeItem('pk_recent_searches');
-                    }
-                }">
-                    <form action="{{ url('/products') }}" method="GET" class="relative" @submit="saveSearch()">
+                {{-- Search Bar with Live Autocomplete --}}
+                <div class="flex-1 max-w-2xl hidden md:block" x-data="searchAutocomplete()" @click.away="close()" @keydown.escape.window="close()">
+                    <form action="{{ url('/products') }}" method="GET" class="relative" @submit.prevent="submitSearch()">
                         <input
                             type="text"
                             name="search"
                             x-model="query"
+                            x-ref="searchInput"
                             placeholder="Search for products, brands, and more..."
                             class="w-full pl-4 pr-12 py-2.5 border-2 border-gray-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all duration-200 text-sm"
-                            @focus="focused = true"
-                            @blur="setTimeout(() => focused = false, 200)"
+                            @focus="onFocus()"
+                            @input.debounce.300ms="onInput()"
+                            @keydown.arrow-down.prevent="navigateDown()"
+                            @keydown.arrow-up.prevent="navigateUp()"
+                            @keydown.enter.prevent="selectCurrent()"
                             autocomplete="off"
                         >
-                        <button type="submit" class="absolute right-0 top-0 h-full px-4 bg-primary-600 text-white rounded-r-lg hover:bg-primary-700 transition-colors" aria-label="Search">
+                        <button type="submit" @click.prevent="submitSearch()" class="absolute right-0 top-0 h-full px-4 bg-primary-600 text-white rounded-r-lg hover:bg-primary-700 transition-colors" aria-label="Search">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </button>
-                        {{-- Recent Searches Dropdown --}}
-                        <div x-show="showSuggestions" x-cloak
-                             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
-                             class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 z-50 overflow-hidden">
-                            <div class="flex items-center justify-between px-4 py-2 border-b border-gray-100">
-                                <span class="text-xs font-semibold text-gray-400 uppercase">Recent Searches</span>
-                                <button type="button" @click="clearRecent()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">Clear</button>
-                            </div>
-                            <template x-for="search in recentSearches" :key="search">
-                                <button type="button" @click="query = search; $nextTick(() => $el.closest('form').submit())"
-                                        class="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors text-left">
-                                    <svg class="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span x-text="search"></span>
-                                </button>
-                            </template>
+                        {{-- Loading indicator --}}
+                        <div x-show="loading" class="absolute right-14 top-1/2 -translate-y-1/2">
+                            <svg class="w-4 h-4 animate-spin text-primary-500" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                        </div>
+                        {{-- Autocomplete Dropdown --}}
+                        <div x-show="open && (showRecent || showResults)" x-cloak
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-1"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden max-h-[480px] overflow-y-auto">
+                            @include('partials.search-dropdown')
                         </div>
                     </form>
                 </div>
@@ -390,19 +377,33 @@
             </div>
         </div>
 
-        {{-- Mobile Search Bar --}}
-        <div class="md:hidden px-4 py-2 bg-gray-50 border-t border-gray-100">
-            <form action="{{ url('/products') }}" method="GET" class="relative">
+        {{-- Mobile Search Bar with Autocomplete --}}
+        <div class="md:hidden px-4 py-2 bg-gray-50 border-t border-gray-100" x-data="searchAutocomplete()" @click.away="close()">
+            <form action="{{ url('/products') }}" method="GET" class="relative" @submit.prevent="submitSearch()">
                 <input
                     type="text"
                     name="search"
-                    value="{{ request('search') }}"
+                    x-model="query"
                     placeholder="Search products..."
                     class="w-full pl-4 pr-10 py-2 border border-gray-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none text-sm"
+                    @focus="onFocus()"
+                    @input.debounce.300ms="onInput()"
+                    @keydown.arrow-down.prevent="navigateDown()"
+                    @keydown.arrow-up.prevent="navigateUp()"
+                    @keydown.enter.prevent="selectCurrent()"
+                    autocomplete="off"
                 >
-                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-600">
+                <button type="submit" @click.prevent="submitSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </button>
+                {{-- Mobile Autocomplete Dropdown --}}
+                <div x-show="open && (showRecent || showResults)" x-cloak
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-100 z-50 max-h-[60vh] overflow-y-auto">
+                    @include('partials.search-dropdown')
+                </div>
             </form>
         </div>
 
@@ -649,6 +650,125 @@
             btn.classList.add('btn-loading');
         }
     });
+    </script>
+
+    {{-- Search Autocomplete Component --}}
+    <script>
+    function searchAutocomplete() {
+        return {
+            query: new URLSearchParams(window.location.search).get('search') || '',
+            open: false,
+            loading: false,
+            hasSearched: false,
+            activeIndex: -1,
+            results: { products: [], categories: [], brands: [], total_count: 0, view_all_url: '' },
+            recentSearches: JSON.parse(localStorage.getItem('pk_recent_searches') || '[]'),
+            abortController: null,
+
+            get showRecent() {
+                return this.open && !this.query.trim() && this.recentSearches.length > 0;
+            },
+            get showResults() {
+                return this.open && this.query.trim().length > 0 && this.hasSearched;
+            },
+            get allItems() {
+                let items = [];
+                if (this.results.products) items.push(...this.results.products.map(p => ({ url: p.url })));
+                if (this.results.categories) items.push(...this.results.categories.map(c => ({ url: c.url })));
+                if (this.results.brands) items.push(...this.results.brands.map(b => ({ url: b.url })));
+                return items;
+            },
+
+            onFocus() {
+                this.open = true;
+                if (this.query.trim() && !this.hasSearched) {
+                    this.onInput();
+                }
+            },
+            close() {
+                this.open = false;
+                this.activeIndex = -1;
+            },
+
+            async onInput() {
+                const q = this.query.trim();
+                if (!q) {
+                    this.results = { products: [], categories: [], brands: [], total_count: 0, view_all_url: '' };
+                    this.hasSearched = false;
+                    this.open = true;
+                    return;
+                }
+
+                if (this.abortController) {
+                    this.abortController.abort();
+                }
+                this.abortController = new AbortController();
+                this.loading = true;
+                this.open = true;
+
+                try {
+                    const resp = await fetch('/search/suggestions?q=' + encodeURIComponent(q), {
+                        signal: this.abortController.signal,
+                        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    if (resp.ok) {
+                        this.results = await resp.json();
+                        this.hasSearched = true;
+                        this.activeIndex = -1;
+                    }
+                } catch (e) {
+                    if (e.name !== 'AbortError') console.error('Search error:', e);
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            navigateDown() {
+                const max = this.allItems.length;
+                if (max === 0) return;
+                this.activeIndex = (this.activeIndex + 1) % max;
+            },
+            navigateUp() {
+                const max = this.allItems.length;
+                if (max === 0) return;
+                this.activeIndex = this.activeIndex <= 0 ? max - 1 : this.activeIndex - 1;
+            },
+            selectCurrent() {
+                if (this.activeIndex >= 0 && this.activeIndex < this.allItems.length) {
+                    window.location.href = this.allItems[this.activeIndex].url;
+                } else {
+                    this.submitSearch();
+                }
+            },
+
+            submitSearch() {
+                if (!this.query.trim()) return;
+                this.saveSearch();
+                window.location.href = '/products?search=' + encodeURIComponent(this.query.trim());
+            },
+
+            saveSearch() {
+                if (!this.query.trim()) return;
+                let searches = this.recentSearches.filter(s => s !== this.query.trim());
+                searches.unshift(this.query.trim());
+                searches = searches.slice(0, 5);
+                this.recentSearches = searches;
+                localStorage.setItem('pk_recent_searches', JSON.stringify(searches));
+            },
+
+            clearRecent() {
+                this.recentSearches = [];
+                localStorage.removeItem('pk_recent_searches');
+            },
+
+            highlightMatch(text, query) {
+                if (!query || !text) return text || '';
+                const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp('(' + escaped + ')', 'gi');
+                return text.replace(regex, '<mark class="bg-yellow-100 text-yellow-800 rounded px-0.5">$1</mark>');
+            }
+        };
+    }
     </script>
 
     @stack('scripts')

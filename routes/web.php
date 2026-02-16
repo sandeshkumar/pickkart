@@ -77,6 +77,16 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| Search Suggestions (AJAX)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/search/suggestions', [\App\Http\Controllers\SearchController::class, 'suggestions'])
+    ->middleware('throttle:60,1')
+    ->name('search.suggestions');
+
+/*
+|--------------------------------------------------------------------------
 | Contact
 |--------------------------------------------------------------------------
 */
