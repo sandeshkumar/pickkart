@@ -152,6 +152,7 @@
             $imagePaths = ($product->images ?? collect())->pluck('path')->values();
             $productOptions = $product->options ?? [];
             $initSelections = collect($productOptions)->mapWithKeys(fn($opt, $i) => ['option'.($i+1) => ''])->all();
+            $isWishlisted = auth()->check() && auth()->user()->wishlists()->where('product_id', $product->id)->exists();
         @endphp
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" x-data="{
             selectedImage: 0,
@@ -244,9 +245,19 @@
                         @endif
 
                         {{-- Wishlist Button --}}
-                        <button @click.stop class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 shadow-md transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                        </button>
+                        @auth
+                            <form action="{{ route('wishlist.toggle') }}" method="POST" class="absolute top-4 right-4" @click.stop>
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <button type="submit" class="w-10 h-10 bg-white rounded-full flex items-center justify-center {{ $isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500' }} shadow-md transition-colors" title="{{ $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' }}">
+                                    <svg class="w-5 h-5" fill="{{ $isWishlisted ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 shadow-md transition-colors" @click.stop title="Login to add to Wishlist">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            </a>
+                        @endauth
 
                         {{-- Zoom Hint --}}
                         <div class="absolute bottom-3 right-3 bg-black/40 text-white text-xs px-2 py-1 rounded flex items-center gap-1 pointer-events-none">
@@ -430,14 +441,21 @@
 
                     {{-- Wishlist & Share --}}
                     <div class="flex items-center gap-4 pt-4 border-t border-gray-100">
-                        <form action="{{ url('/wishlist/toggle') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id ?? 1 }}">
-                            <button type="submit" class="flex items-center gap-2 text-sm text-gray-600 hover:text-red-500 transition-colors">
+                        @auth
+                            <form action="{{ route('wishlist.toggle') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <button type="submit" class="flex items-center gap-2 text-sm {{ $isWishlisted ? 'text-red-500' : 'text-gray-600 hover:text-red-500' }} transition-colors">
+                                    <svg class="w-5 h-5" fill="{{ $isWishlisted ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                    {{ $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' }}
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="flex items-center gap-2 text-sm text-gray-600 hover:text-red-500 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                                 Add to Wishlist
-                            </button>
-                        </form>
+                            </a>
+                        @endauth
                         <button @click="
                             if (navigator.share) {
                                 navigator.share({ title: '{{ addslashes($product->name) }}', url: window.location.href });
