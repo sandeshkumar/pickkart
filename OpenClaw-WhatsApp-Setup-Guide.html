@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw + WhatsApp Setup Guide — PickKart</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: #f8f9fa;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+        }
+
+        /* Cover Page */
+        .cover {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 40%, #075E54 100%);
+            color: #fff;
+            padding: 80px 60px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .cover-logo {
+            font-size: 64px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .cover h2 {
+            font-size: 22px;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-meta {
+            margin-top: 50px;
+            font-size: 14px;
+            opacity: 0.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Content area */
+        .content {
+            padding: 50px 60px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: #f0faf4;
+            border: 2px solid #25D366;
+            border-radius: 12px;
+            padding: 35px 40px;
+            margin-bottom: 50px;
+        }
+
+        .toc h2 {
+            color: #075E54;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #25D366;
+        }
+
+        .toc ol {
+            columns: 2;
+            column-gap: 40px;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            padding: 5px 0;
+            font-size: 15px;
+            color: #333;
+            break-inside: avoid;
+        }
+
+        .toc li a {
+            color: #128C7E;
+            text-decoration: none;
+        }
+
+        .toc li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Section headings */
+        h2.section-title {
+            font-size: 28px;
+            color: #075E54;
+            margin-top: 55px;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #25D366;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2.section-title .num {
+            background: #25D366;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        h3 {
+            font-size: 20px;
+            color: #1a1a2e;
+            margin-top: 30px;
+            margin-bottom: 12px;
+        }
+
+        h4 {
+            font-size: 17px;
+            color: #444;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 14px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            background: #1a1a2e;
+            color: #25D366;
+            padding: 25px 30px;
+            border-radius: 10px;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 20px 0;
+            white-space: pre;
+        }
+
+        /* Code blocks */
+        pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 20px 24px;
+            border-radius: 10px;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 15px 0 20px;
+            border-left: 4px solid #25D366;
+        }
+
+        pre .comment { color: #6c7086; }
+        pre .keyword { color: #cba6f7; }
+        pre .string { color: #a6e3a1; }
+        pre .cmd { color: #89b4fa; }
+
+        code {
+            background: #e8f5e9;
+            color: #075E54;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 14px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 25px;
+            font-size: 14px;
+        }
+
+        thead th {
+            background: #075E54;
+            color: #fff;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        tbody td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fdf9;
+        }
+
+        tbody tr:hover {
+            background: #e8f5e9;
+        }
+
+        /* Comparison highlight */
+        .highlight-free {
+            color: #25D366;
+            font-weight: 700;
+        }
+
+        /* Info boxes */
+        .info-box {
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .info-box.note {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+        }
+
+        .info-box.tip {
+            background: #e8f5e9;
+            border-left: 4px solid #25D366;
+        }
+
+        .info-box.warning {
+            background: #fce4ec;
+            border-left: 4px solid #e53935;
+        }
+
+        .info-box.important {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Chat examples */
+        .chat-container {
+            background: #e5ddd5;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c5b9a8' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0 25px;
+        }
+
+        .chat-msg {
+            max-width: 75%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            clear: both;
+        }
+
+        .chat-msg.user {
+            background: #dcf8c6;
+            float: right;
+            border-bottom-right-radius: 3px;
+        }
+
+        .chat-msg.bot {
+            background: #fff;
+            float: left;
+            border-bottom-left-radius: 3px;
+        }
+
+        .chat-msg .sender {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .chat-msg.user .sender { color: #075E54; }
+        .chat-msg.bot .sender { color: #25D366; }
+
+        .chat-clear { clear: both; }
+
+        /* Checklist */
+        .checklist {
+            background: #f8fdf9;
+            border: 2px solid #25D366;
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 20px 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e8f5e9;
+            font-size: 14px;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #25D366;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checklist-num {
+            color: #128C7E;
+            font-weight: 700;
+            min-width: 24px;
+        }
+
+        /* Lists */
+        ul, ol {
+            padding-left: 24px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        /* Cost summary box */
+        .cost-box {
+            background: linear-gradient(135deg, #e8f5e9, #f0faf4);
+            border: 2px solid #25D366;
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .cost-box .big-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #075E54;
+        }
+
+        .cost-box .label {
+            font-size: 16px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 60px;
+            border-top: 2px solid #e0e0e0;
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* Print button */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37,211,102,0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+        }
+
+        /* Page breaks for print */
+        .page-break {
+            page-break-before: always;
+        }
+
+        @media print {
+            body { background: #fff; }
+            .container { box-shadow: none; }
+            .print-btn { display: none; }
+            .cover { min-height: auto; padding: 60px 50px; }
+            .content { padding: 30px 40px; }
+            pre { font-size: 11px; }
+            .chat-container { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            h2.section-title { page-break-after: avoid; }
+            table, pre, .chat-container { page-break-inside: avoid; }
+            .toc { page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">&#128424; Save as PDF</button>
+
+    <div class="container">
+        <!-- Cover Page -->
+        <div class="cover">
+            <div class="cover-logo">&#128172; + &#129302;</div>
+            <h1>OpenClaw + WhatsApp<br>Setup Guide</h1>
+            <h2>AI-Powered WhatsApp Customer Support for PickKart</h2>
+            <div class="cover-badge">Complete Step-by-Step Guide</div>
+            <div class="cover-meta">
+                pickkart.co.in &bull; February 2026<br>
+                15 Sections &bull; VPS Setup to Production Deployment
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h2>Table of Contents</h2>
+                <ol>
+                    <li><a href="#s1">Overview</a></li>
+                    <li><a href="#s2">Prerequisites</a></li>
+                    <li><a href="#s3">VPS Server Setup</a></li>
+                    <li><a href="#s4">Install OpenClaw</a></li>
+                    <li><a href="#s5">Connect WhatsApp</a></li>
+                    <li><a href="#s6">Configure Access Control</a></li>
+                    <li><a href="#s7">Create PickKart Skill</a></li>
+                    <li><a href="#s8">Database Query Tools</a></li>
+                    <li><a href="#s9">AI Model Configuration</a></li>
+                    <li><a href="#s10">Test the Bot</a></li>
+                    <li><a href="#s11">Production Deployment</a></li>
+                    <li><a href="#s12">Monitoring &amp; Maintenance</a></li>
+                    <li><a href="#s13">Conversation Examples</a></li>
+                    <li><a href="#s14">Troubleshooting</a></li>
+                    <li><a href="#s15">Cost Summary</a></li>
+                </ol>
+            </div>
+
+            <!-- Section 1: Overview -->
+            <h2 class="section-title" id="s1"><span class="num">1</span> Overview</h2>
+
+            <h3>What We're Building</h3>
+            <p>An AI-powered WhatsApp assistant that:</p>
+            <ul>
+                <li>Auto-replies to customer queries 24/7</li>
+                <li>Checks product availability from PickKart's database</li>
+                <li>Helps customers place orders via WhatsApp</li>
+                <li>Sends order status updates</li>
+                <li>Handles FAQs (shipping, returns, payment)</li>
+            </ul>
+
+            <h3>Architecture</h3>
+            <div class="arch-diagram">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                      YOUR VPS SERVER                       &#9474;
+&#9474;                                                             &#9474;
+&#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9474;
+&#9474;  &#9474;  WhatsApp  &#9474;   &#9474;  OpenClaw  &#9474;   &#9474;  PickKart  &#9474; &#9474;
+&#9474;  &#9474;  Baileys   &#9474;&#9668;&#9472;&#9658;&#9474;  Gateway   &#9474;&#9668;&#9472;&#9658;&#9474;  MySQL DB  &#9474; &#9474;
+&#9474;  &#9474; (Protocol) &#9474;   &#9474;            &#9474;   &#9474;            &#9474; &#9474;
+&#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9474;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9474;
+&#9474;                      &#9474;  &#9474; AI LLM &#9474;  &#9474;                      &#9474;
+&#9474;                      &#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9474;                      &#9474;
+&#9474;                      &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;                      &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+        &#9650;
+        &#9474; WhatsApp Web Protocol (free)
+        &#9660;
+&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474; Customer Phone   &#9474;
+&#9474; (WhatsApp)       &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</div>
+
+            <h3>How Baileys Works (Free WhatsApp Connection)</h3>
+            <p>OpenClaw uses <strong>Baileys</strong> — an open-source library that emulates WhatsApp Web's linked device protocol.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Official WhatsApp Business API</th>
+                        <th>OpenClaw + Baileys</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cost per message</td><td>Rs 0.40 - Rs 6</td><td class="highlight-free">Free</td></tr>
+                    <tr><td>Approval required</td><td>Yes (Meta/Facebook)</td><td class="highlight-free">No</td></tr>
+                    <tr><td>Account type</td><td>Business account</td><td class="highlight-free">Any personal number</td></tr>
+                    <tr><td>Setup time</td><td>Weeks</td><td class="highlight-free">5 minutes (QR scan)</td></tr>
+                    <tr><td>Self-hosted</td><td>No</td><td class="highlight-free">Yes</td></tr>
+                    <tr><td>AI integration</td><td>Limited</td><td class="highlight-free">Full (any LLM)</td></tr>
+                </tbody>
+            </table>
+
+            <!-- Section 2: Prerequisites -->
+            <h2 class="section-title page-break" id="s2"><span class="num">2</span> Prerequisites</h2>
+
+            <h3>What You Need Before Starting</h3>
+            <table>
+                <thead>
+                    <tr><th>Requirement</th><th>Details</th><th>Cost</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>VPS Server</strong></td><td>Ubuntu 22.04+, 1GB+ RAM, 20GB storage</td><td>Rs 500-800/month</td></tr>
+                    <tr><td><strong>Dedicated Phone Number</strong></td><td>New SIM card for WhatsApp bot</td><td>Rs 100-200 (one-time)</td></tr>
+                    <tr><td><strong>Domain Name</strong> (optional)</td><td>For SSL and webhook</td><td>Already have pickkart.co.in</td></tr>
+                    <tr><td><strong>Node.js 20+</strong></td><td>Runtime for OpenClaw</td><td>Free</td></tr>
+                    <tr><td><strong>AI API Key</strong> (optional)</td><td>Claude, GPT, or use free local model</td><td>Free to Rs 1500/month</td></tr>
+                    <tr><td><strong>SSH Access</strong></td><td>Terminal access to your VPS</td><td>Included with VPS</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Recommended VPS Providers for India</h3>
+            <table>
+                <thead>
+                    <tr><th>Provider</th><th>Plan</th><th>RAM</th><th>Cost/month</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>DigitalOcean</strong></td><td>Basic Droplet</td><td>1GB</td><td>~Rs 500</td><td>Bangalore datacenter</td></tr>
+                    <tr><td><strong>Hetzner</strong></td><td>CX22</td><td>2GB</td><td>~Rs 400</td><td>Best value, EU servers</td></tr>
+                    <tr><td><strong>Hostinger VPS</strong></td><td>KVM 1</td><td>4GB</td><td>~Rs 500</td><td>Same provider as hosting</td></tr>
+                    <tr><td><strong>Linode</strong></td><td>Nanode</td><td>1GB</td><td>~Rs 500</td><td>Mumbai datacenter</td></tr>
+                    <tr><td><strong>AWS Lightsail</strong></td><td>Nano</td><td>512MB</td><td>~Rs 300</td><td>Mumbai region</td></tr>
+                </tbody>
+            </table>
+
+            <!-- Section 3: VPS Server Setup -->
+            <h2 class="section-title page-break" id="s3"><span class="num">3</span> VPS Server Setup</h2>
+
+            <h3>Step 3.1: Create a VPS</h3>
+            <ol>
+                <li>Sign up at your chosen VPS provider (e.g., DigitalOcean)</li>
+                <li>Create a new server:
+                    <ul>
+                        <li><strong>OS:</strong> Ubuntu 22.04 LTS</li>
+                        <li><strong>RAM:</strong> 1GB minimum (2GB recommended)</li>
+                        <li><strong>Region:</strong> Bangalore / Mumbai (closest to India)</li>
+                        <li><strong>SSH Key:</strong> Add your SSH public key</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Step 3.2: Connect to Your VPS</h3>
+            <pre>ssh root@YOUR_VPS_IP</pre>
+
+            <h3>Step 3.3: Initial Server Setup</h3>
+            <pre><span class="comment"># Update system packages</span>
+apt update && apt upgrade -y
+
+<span class="comment"># Create a non-root user</span>
+adduser pickkart
+usermod -aG sudo pickkart
+
+<span class="comment"># Switch to new user</span>
+su - pickkart</pre>
+
+            <h3>Step 3.4: Install Node.js 20+</h3>
+            <pre><span class="comment"># Install Node.js via nvm (recommended)</span>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+<span class="comment"># Reload shell</span>
+source ~/.bashrc
+
+<span class="comment"># Install Node.js 20</span>
+nvm install 20
+nvm use 20
+
+<span class="comment"># Verify installation</span>
+node --version   <span class="comment"># Should show v20.x.x</span>
+npm --version    <span class="comment"># Should show 10.x.x</span></pre>
+
+            <h3>Step 3.5: Install MySQL Client</h3>
+            <pre>sudo apt install -y mysql-client</pre>
+
+            <h3>Step 3.6: Test Database Connection</h3>
+            <pre>mysql -h YOUR_HOSTINGER_DB_HOST -u YOUR_DB_USER -p YOUR_DB_NAME \
+  -e "SELECT COUNT(*) FROM products WHERE status='active';"</pre>
+
+            <div class="info-box note">
+                <strong>&#9888;&#65039; Note:</strong>
+                Your Hostinger database may only allow connections from specific IPs. You'll need to whitelist your VPS IP in Hostinger's <strong>Remote MySQL</strong> settings: hPanel &rarr; Databases &rarr; Remote MySQL &rarr; Add your VPS IP address.
+            </div>
+
+            <!-- Section 4: Install OpenClaw -->
+            <h2 class="section-title page-break" id="s4"><span class="num">4</span> Install OpenClaw</h2>
+
+            <h3>Step 4.1: Install OpenClaw CLI</h3>
+            <pre><span class="comment"># Install OpenClaw globally</span>
+curl -fsSL https://get.openclaw.ai | bash
+
+<span class="comment"># Or via npm</span>
+npm install -g @openclaw/cli
+
+<span class="comment"># Verify installation</span>
+openclaw --version</pre>
+
+            <h3>Step 4.2: Initialize OpenClaw</h3>
+            <pre><span class="comment"># Create workspace</span>
+mkdir -p ~/.openclaw/workspace
+cd ~/.openclaw
+
+<span class="comment"># Initialize configuration</span>
+openclaw init</pre>
+
+            <p>This creates the default directory structure:</p>
+            <pre>~/.openclaw/
+&#9500;&#9472;&#9472; config.json5          <span class="comment"># Main configuration</span>
+&#9500;&#9472;&#9472; credentials/          <span class="comment"># Channel credentials (auto-generated)</span>
+&#9474;   &#9492;&#9472;&#9472; whatsapp/
+&#9500;&#9472;&#9472; workspace/
+&#9474;   &#9492;&#9472;&#9472; skills/           <span class="comment"># Custom skills/plugins</span>
+&#9474;       &#9492;&#9472;&#9472; pickkart/     <span class="comment"># Our PickKart skill</span>
+&#9492;&#9472;&#9472; logs/                 <span class="comment"># Gateway logs</span></pre>
+
+            <!-- Section 5: Connect WhatsApp -->
+            <h2 class="section-title page-break" id="s5"><span class="num">5</span> Connect WhatsApp</h2>
+
+            <h3>Step 5.1: Get a Dedicated Phone Number</h3>
+            <div class="info-box warning">
+                <strong>&#9888;&#65039; Important:</strong>
+                Use a <strong>separate SIM card</strong> for the WhatsApp bot. Do NOT use your personal number. If WhatsApp flags the bot, your personal account stays safe.
+            </div>
+
+            <p><strong>Options:</strong></p>
+            <ul>
+                <li>Buy a new prepaid SIM (Jio/Airtel/Vi) — Rs 100-200</li>
+                <li>Use a virtual number service</li>
+                <li>Use a dual-SIM phone temporarily for setup</li>
+            </ul>
+
+            <h3>Step 5.2: Activate WhatsApp on the New Number</h3>
+            <ol>
+                <li>Install WhatsApp on a phone with the new SIM</li>
+                <li>Complete phone verification</li>
+                <li>Set up a profile (name: "PickKart Support", photo: your logo)</li>
+            </ol>
+
+            <h3>Step 5.3: Link to OpenClaw</h3>
+            <p>On your VPS, run:</p>
+            <pre>openclaw channels login --channel whatsapp</pre>
+            <p>This displays a <strong>QR code</strong> in your terminal. On the phone with WhatsApp:</p>
+            <ol>
+                <li>Open WhatsApp</li>
+                <li>Go to <strong>Settings &rarr; Linked Devices &rarr; Link a Device</strong></li>
+                <li>Scan the QR code shown in your terminal</li>
+            </ol>
+
+            <p>You should see:</p>
+            <pre>[INFO] WhatsApp linked successfully!
+[INFO] Account: +91XXXXXXXXXX
+[INFO] Session stored at: ~/.openclaw/credentials/whatsapp/default/creds.json</pre>
+
+            <h3>Step 5.4: Verify Connection</h3>
+            <pre>openclaw channels status
+
+<span class="comment"># Expected output:</span>
+Channel    Account     Status
+&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;  &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;  &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+whatsapp   default     connected</pre>
+
+            <!-- Section 6: Configure Access Control -->
+            <h2 class="section-title page-break" id="s6"><span class="num">6</span> Configure Access Control</h2>
+
+            <h3>Step 6.1: Edit Configuration</h3>
+            <pre>nano ~/.openclaw/config.json5</pre>
+
+            <h3>Step 6.2: WhatsApp Channel Configuration</h3>
+            <pre>{
+  <span class="comment">// Gateway settings</span>
+  gateway: {
+    host: <span class="string">"127.0.0.1"</span>,
+    port: 18789,
+  },
+
+  <span class="comment">// Channel configurations</span>
+  channels: {
+    whatsapp: {
+      <span class="comment">// === ACCESS CONTROL ===</span>
+      dmPolicy: <span class="string">"open"</span>,
+      allowFrom: [<span class="string">"*"</span>],
+
+      <span class="comment">// === GROUP SETTINGS ===</span>
+      groupPolicy: <span class="string">"disabled"</span>,
+
+      <span class="comment">// === MESSAGE SETTINGS ===</span>
+      sendReadReceipts: <span class="keyword">true</span>,
+
+      ackReaction: {
+        emoji: <span class="string">"&#128064;"</span>,
+        direct: <span class="keyword">true</span>,
+        group: <span class="keyword">false</span>,
+      },
+
+      chunking: {
+        mode: <span class="string">"newline"</span>,
+        limit: 4000,
+      },
+
+      <span class="comment">// === MEDIA SETTINGS ===</span>
+      mediaMaxMb: 10,
+
+      <span class="comment">// === RATE LIMITING ===</span>
+      rateLimit: {
+        maxMessages: 30,
+        windowSeconds: 60,
+      },
+    },
+  },
+}</pre>
+
+            <!-- Section 7: Create PickKart Skill -->
+            <h2 class="section-title page-break" id="s7"><span class="num">7</span> Create PickKart Skill</h2>
+
+            <h3>Step 7.1: Create Skill Directory</h3>
+            <pre>mkdir -p ~/.openclaw/workspace/skills/pickkart/tools</pre>
+
+            <h3>Step 7.2: Create the Skill Definition</h3>
+            <pre>nano ~/.openclaw/workspace/skills/pickkart/SKILL.md</pre>
+
+            <p>Write the following content in the SKILL.md file:</p>
+
+            <pre><span class="comment"># PickKart Customer Support</span>
+
+You are PickKart's friendly WhatsApp customer support assistant.
+Website: https://pickkart.co.in
+
+<span class="comment">## Your Personality</span>
+- Friendly, helpful, and professional
+- Reply in the same language the customer uses (Hindi or English)
+- Keep messages concise (WhatsApp-friendly)
+- Use emojis sparingly but naturally
+- Always show prices in INR (Rs or &#8377;)
+
+<span class="comment">## What You Can Do</span>
+
+<span class="keyword">Product Queries:</span> Search products, check stock, show prices, compare, recommend
+<span class="keyword">Order Management:</span> Place orders, check status, explain shipping, handle returns
+<span class="keyword">Store Info:</span> Hours (24/7), Free shipping &gt; Rs 499, 30-day returns, COD/UPI/Cards
+
+<span class="comment">## Response Format</span>
+&#128230; *Product Name*
+&#128176; Rs X,XXX (~~Rs X,XXX~~)
+&#9989; In Stock / &#10060; Out of Stock
+
+<span class="comment">## Escalation Rules</span>
+- Angry/complex issues &rarr; connect with team + provide support email
+- Never make up product info not in database
+- Never promise specific delivery dates
+- Never share other customers' information
+
+<span class="comment">## Available Tools</span>
+- check_product, check_order, check_variants, create_order, list_categories</pre>
+
+            <!-- Section 8: Database Query Tools -->
+            <h2 class="section-title page-break" id="s8"><span class="num">8</span> Database Query Tools</h2>
+
+            <h3>Step 8.1: Install MySQL Package</h3>
+            <pre>cd ~/.openclaw/workspace/skills/pickkart
+npm init -y
+npm install mysql2</pre>
+
+            <h3>Step 8.2: Database Connection Helper — <code>tools/db.js</code></h3>
+            <pre><span class="keyword">const</span> mysql = require(<span class="string">'mysql2/promise'</span>);
+
+<span class="keyword">const</span> DB_CONFIG = {
+  host: <span class="string">'YOUR_HOSTINGER_DB_HOST'</span>,      <span class="comment">// e.g., srv1234.hstgr.io</span>
+  port: 3306,
+  user: <span class="string">'YOUR_DB_USERNAME'</span>,
+  password: <span class="string">'YOUR_DB_PASSWORD'</span>,
+  database: <span class="string">'u282948928_zedkart'</span>,
+  waitForConnections: <span class="keyword">true</span>,
+  connectionLimit: 5,
+};
+
+<span class="keyword">let</span> pool = <span class="keyword">null</span>;
+
+<span class="keyword">function</span> getPool() {
+  <span class="keyword">if</span> (!pool) { pool = mysql.createPool(DB_CONFIG); }
+  <span class="keyword">return</span> pool;
+}
+
+<span class="keyword">async function</span> query(sql, params = []) {
+  <span class="keyword">const</span> connection = <span class="keyword">await</span> getPool().getConnection();
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> [rows] = <span class="keyword">await</span> connection.execute(sql, params);
+    <span class="keyword">return</span> rows;
+  } <span class="keyword">finally</span> {
+    connection.release();
+  }
+}
+
+module.exports = { query };</pre>
+
+            <h3>Step 8.3: Product Search Tool — <code>tools/check_product.js</code></h3>
+            <pre><span class="keyword">const</span> { query } = require(<span class="string">'./db'</span>);
+
+module.exports = {
+  name: <span class="string">'check_product'</span>,
+  description: <span class="string">'Search products by name, category, or brand'</span>,
+  parameters: {
+    type: <span class="string">'object'</span>,
+    properties: {
+      search: { type: <span class="string">'string'</span>, description: <span class="string">'Search keyword'</span> },
+    },
+    required: [<span class="string">'search'</span>],
+  },
+
+  <span class="keyword">async</span> execute({ search }) {
+    <span class="keyword">const</span> results = <span class="keyword">await</span> query(
+      <span class="string">`SELECT p.id, p.name, p.price, p.compare_at_price,
+        p.stock_quantity, p.slug, c.name AS category, b.name AS brand
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN brands b ON p.brand_id = b.id
+      WHERE p.status = 'active' AND p.stock_quantity > 0
+        AND (p.name LIKE ? OR c.name LIKE ? OR b.name LIKE ?)
+      ORDER BY p.is_featured DESC LIMIT 5`</span>,
+      [`%${search}%`, `%${search}%`, `%${search}%`]
+    );
+
+    <span class="keyword">return</span> JSON.stringify({
+      found: results.length > 0,
+      products: results.map(p =&gt; ({
+        id: p.id, name: p.name,
+        price: <span class="string">`Rs ${Number(p.price).toLocaleString('en-IN')}`</span>,
+        inStock: p.stock_quantity > 0,
+        url: <span class="string">`https://pickkart.co.in/products/${p.slug}`</span>,
+      })),
+    });
+  },
+};</pre>
+
+            <h3>Step 8.4: Variants Tool — <code>tools/check_variants.js</code></h3>
+            <p>Queries <code>product_variants</code> table by product ID. Returns sizes, colors, prices, and stock for each variant.</p>
+
+            <h3>Step 8.5: Order Status Tool — <code>tools/check_order.js</code></h3>
+            <p>Looks up orders by order number or phone number. Returns status, payment info, items, and delivery details.</p>
+
+            <h3>Step 8.6: Category Listing Tool — <code>tools/list_categories.js</code></h3>
+            <p>Lists all active categories with product counts. Helps customers browse available product types.</p>
+
+            <h3>Step 8.7: Order Placement Tool — <code>tools/create_order.js</code></h3>
+            <p>Creates a new order by inserting into <code>orders</code> and <code>order_items</code> tables. Handles stock validation, variant pricing, shipping calculation (free over Rs 499), and order number generation.</p>
+
+            <div class="info-box tip">
+                <strong>&#128161; Tip:</strong>
+                Full code for all 5 tools is available in the <code>OpenClaw-WhatsApp-Setup-Guide.md</code> file included in your project. Copy the code blocks directly to your VPS.
+            </div>
+
+            <!-- Section 9: AI Model Configuration -->
+            <h2 class="section-title page-break" id="s9"><span class="num">9</span> AI Model Configuration</h2>
+
+            <p>OpenClaw needs an AI model to understand customer messages and generate responses. You have three options:</p>
+
+            <table>
+                <thead>
+                    <tr><th>Option</th><th>Provider</th><th>Model</th><th>Cost</th><th>Best For</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>A</strong></td>
+                        <td>Ollama (Local)</td>
+                        <td>llama3.1:8b</td>
+                        <td class="highlight-free">Free</td>
+                        <td>Testing, low-volume</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B</strong></td>
+                        <td>Anthropic</td>
+                        <td>Claude Sonnet</td>
+                        <td>Rs 200-500/month</td>
+                        <td>Production (recommended)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>C</strong></td>
+                        <td>OpenAI</td>
+                        <td>GPT-4o-mini</td>
+                        <td>Rs 100-300/month</td>
+                        <td>Budget production</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Option A: Free Local Model (Ollama)</h3>
+            <pre><span class="comment"># Install Ollama on VPS</span>
+curl -fsSL https://ollama.ai/install.sh | sh
+
+<span class="comment"># Download a model</span>
+ollama pull llama3.1:8b</pre>
+
+            <pre><span class="comment">// In config.json5</span>
+ai: {
+  provider: <span class="string">"ollama"</span>,
+  model: <span class="string">"llama3.1:8b"</span>,
+  baseUrl: <span class="string">"http://127.0.0.1:11434"</span>,
+  temperature: 0.7,
+  maxTokens: 1024,
+}</pre>
+
+            <h3>Option B: Claude API (Recommended)</h3>
+            <pre>ai: {
+  provider: <span class="string">"anthropic"</span>,
+  model: <span class="string">"claude-sonnet-4-5-20250929"</span>,
+  apiKey: <span class="string">"sk-ant-api03-YOUR_KEY_HERE"</span>,
+  temperature: 0.7,
+  maxTokens: 1024,
+}</pre>
+
+            <h3>Option C: OpenAI GPT</h3>
+            <pre>ai: {
+  provider: <span class="string">"openai"</span>,
+  model: <span class="string">"gpt-4o-mini"</span>,
+  apiKey: <span class="string">"sk-YOUR_KEY_HERE"</span>,
+  temperature: 0.7,
+  maxTokens: 1024,
+}</pre>
+
+            <!-- Section 10: Test the Bot -->
+            <h2 class="section-title page-break" id="s10"><span class="num">10</span> Test the Bot</h2>
+
+            <h3>Step 10.1: Start the Gateway</h3>
+            <pre>openclaw gateway
+
+<span class="comment"># Expected output:</span>
+[INFO] Gateway started on ws://127.0.0.1:18789
+[INFO] WhatsApp: connected (+91XXXXXXXXXX)
+[INFO] Skills loaded: pickkart (5 tools)
+[INFO] AI provider: ollama (llama3.1:8b)
+[INFO] Ready for messages!</pre>
+
+            <h3>Step 10.2: Send Test Messages</h3>
+            <p>From <strong>your personal phone</strong> (different from the bot number), message the bot:</p>
+
+            <div class="chat-container">
+                <div class="chat-msg user"><div class="sender">You</div>Do you have Nike shoes?</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Let me check... &#128064;<br><br>
+                    &#128230; <strong>Nike Air Max 270</strong><br>
+                    &#128176; Rs 12,999 (<s>Rs 15,999</s>) — 19% OFF<br>
+                    &#9989; In Stock (15 units)<br><br>
+                    &#128230; <strong>Nike Revolution 6</strong><br>
+                    &#128176; Rs 4,999<br>
+                    &#9989; In Stock (25 units)<br><br>
+                    Would you like to know about sizes and colors?
+                </div>
+                <div class="chat-clear"></div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-msg user"><div class="sender">You</div>What sizes for Nike Air Max?</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Nike Air Max 270 comes in:<br><br>
+                    &#127912; Colors: Black/White, All Black, Blue/Gray<br>
+                    &#128207; Sizes: UK 7, 8, 9, 10, 11<br><br>
+                    All variants priced at Rs 12,999.<br>
+                    Which size and color would you like?
+                </div>
+                <div class="chat-clear"></div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-msg user"><div class="sender">You</div>Order Nike Air Max, size 9, Black/White</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Great choice! &#128076; To place your order, I need:<br><br>
+                    1. Your full name?<br>
+                    2. Delivery address?<br>
+                    3. City, State, PIN code?<br>
+                    4. Payment: COD or Online?
+                </div>
+                <div class="chat-clear"></div>
+            </div>
+
+            <h3>Step 10.3: Test Edge Cases</h3>
+            <ul>
+                <li>Send "Hi" &rarr; Should get a welcome message</li>
+                <li>Send gibberish &rarr; Should ask to rephrase</li>
+                <li>Ask about a product that doesn't exist &rarr; Should say not found</li>
+                <li>Send an image &rarr; Should acknowledge but help with text queries</li>
+                <li>Ask in Hindi &rarr; Should reply in Hindi</li>
+            </ul>
+
+            <!-- Section 11: Production Deployment -->
+            <h2 class="section-title page-break" id="s11"><span class="num">11</span> Production Deployment</h2>
+
+            <h3>Step 11.1: Run as Background Service (systemd)</h3>
+            <pre>sudo nano /etc/systemd/system/openclaw.service</pre>
+
+            <pre>[Unit]
+Description=OpenClaw WhatsApp Gateway
+After=network.target
+
+[Service]
+Type=simple
+User=pickkart
+WorkingDirectory=/home/pickkart/.openclaw
+ExecStart=/home/pickkart/.nvm/versions/node/v20.x.x/bin/openclaw gateway
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target</pre>
+
+            <div class="info-box note">
+                <strong>&#9888;&#65039; Note:</strong>
+                Replace <code>v20.x.x</code> with your actual Node.js version. Find it with: <code>which openclaw</code>
+            </div>
+
+            <h3>Step 11.2: Enable and Start</h3>
+            <pre><span class="comment"># Enable and start the service</span>
+sudo systemctl daemon-reload
+sudo systemctl enable openclaw
+sudo systemctl start openclaw
+
+<span class="comment"># Check status</span>
+sudo systemctl status openclaw
+
+<span class="comment"># View logs</span>
+sudo journalctl -u openclaw -f</pre>
+
+            <h3>Step 11.3: Log Rotation</h3>
+            <pre>sudo nano /etc/logrotate.d/openclaw</pre>
+            <pre>/home/pickkart/.openclaw/logs/*.log {
+    daily
+    missingok
+    rotate 14
+    compress
+    notifempty
+    create 0640 pickkart pickkart
+}</pre>
+
+            <!-- Section 12: Monitoring -->
+            <h2 class="section-title page-break" id="s12"><span class="num">12</span> Monitoring &amp; Maintenance</h2>
+
+            <h3>Daily Monitoring Commands</h3>
+            <pre><span class="comment"># Check if OpenClaw is running</span>
+sudo systemctl status openclaw
+
+<span class="comment"># View recent logs</span>
+sudo journalctl -u openclaw --since "1 hour ago"
+
+<span class="comment"># Check WhatsApp connection</span>
+openclaw channels status
+
+<span class="comment"># Check system resources</span>
+htop</pre>
+
+            <h3>Weekly Maintenance</h3>
+            <pre><span class="comment"># Update OpenClaw</span>
+npm update -g @openclaw/cli
+
+<span class="comment"># Restart service after update</span>
+sudo systemctl restart openclaw
+
+<span class="comment"># Check database connectivity</span>
+openclaw doctor</pre>
+
+            <h3>WhatsApp Session Management</h3>
+            <p>WhatsApp linked device sessions can disconnect. If this happens:</p>
+            <pre><span class="comment"># Check status</span>
+openclaw channels status
+
+<span class="comment"># Re-link if disconnected</span>
+openclaw channels login --channel whatsapp
+
+<span class="comment"># Restart gateway</span>
+sudo systemctl restart openclaw</pre>
+
+            <h3>Backup Credentials</h3>
+            <pre>cp -r ~/.openclaw/credentials ~/.openclaw/credentials.backup.$(date +%Y%m%d)</pre>
+
+            <!-- Section 13: Conversation Examples -->
+            <h2 class="section-title page-break" id="s13"><span class="num">13</span> Conversation Examples</h2>
+
+            <h3>Example 1: Product Discovery</h3>
+            <div class="chat-container">
+                <div class="chat-msg user"><div class="sender">Customer</div>Hi</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Hello! Welcome to PickKart &#128075;<br>
+                    I can help you with:<br><br>
+                    &#128269; Search products<br>
+                    &#128230; Track your order<br>
+                    &#128722; Place an order<br>
+                    &#10067; Answer questions<br><br>
+                    What are you looking for today?
+                </div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg user"><div class="sender">Customer</div>Show me laptops under 50000</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Here are laptops under Rs 50,000:<br><br>
+                    &#128230; <strong>HP Pavilion 15</strong><br>
+                    &#128187; Intel i5, 8GB RAM, 512GB SSD<br>
+                    &#128176; Rs 45,999 (<s>Rs 52,999</s>) — 13% OFF<br>
+                    &#9989; In Stock<br><br>
+                    &#128230; <strong>Lenovo IdeaPad 3</strong><br>
+                    &#128187; AMD Ryzen 5, 8GB RAM, 256GB SSD<br>
+                    &#128176; Rs 38,499<br>
+                    &#9989; In Stock<br><br>
+                    Want more details on any of these?
+                </div>
+                <div class="chat-clear"></div>
+            </div>
+
+            <h3>Example 2: Order via WhatsApp (Hindi)</h3>
+            <div class="chat-container">
+                <div class="chat-msg user"><div class="sender">Customer</div>Bhai Nike shoes chahiye size 9 me</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Zaroor! &#128095; Yeh Nike shoes available hain size 9 me:<br><br>
+                    &#128230; <strong>Nike Air Max 270</strong><br>
+                    &#128176; Rs 12,999 (<s>Rs 15,999</s>)<br>
+                    &#9989; Stock me hai — Size 9<br><br>
+                    &#128230; <strong>Nike Revolution 6</strong><br>
+                    &#128176; Rs 4,999<br>
+                    &#9989; Stock me hai — Size 9<br><br>
+                    Kaunsa lena hai? Number bolo!
+                </div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg user"><div class="sender">Customer</div>1</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Nike Air Max 270 — Rs 12,999 &#128077;<br><br>
+                    Order ke liye mujhe batao:<br>
+                    1. Aapka naam<br>
+                    2. Delivery address (full)<br>
+                    3. City, State, PIN code<br>
+                    4. Payment: COD ya Online?
+                </div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg user"><div class="sender">Customer</div>Sandesh Kumar, 123 MG Road, Vashi, Navi Mumbai, Maharashtra 400703, COD</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    &#127881; <strong>Order Confirmed!</strong><br><br>
+                    &#128203; Order #ORD-2026-0216-X7KM<br>
+                    &#128230; Nike Air Max 270 (Size 9)<br>
+                    &#128176; Rs 12,999 (Free Shipping!)<br>
+                    &#128179; Cash on Delivery<br>
+                    &#128205; 123 MG Road, Vashi, Navi Mumbai, MH - 400703<br><br>
+                    &#128197; Expected delivery: 3-5 business days<br><br>
+                    Thank you for shopping with PickKart! &#128717;&#65039;
+                </div>
+                <div class="chat-clear"></div>
+            </div>
+
+            <h3>Example 3: Order Tracking</h3>
+            <div class="chat-container">
+                <div class="chat-msg user"><div class="sender">Customer</div>Where is my order ORD-2026-0210-AB12?</div>
+                <div class="chat-clear"></div>
+                <div class="chat-msg bot">
+                    <div class="sender">PickKart Bot</div>
+                    Let me check... &#128203;<br><br>
+                    <strong>Order #ORD-2026-0210-AB12</strong><br>
+                    &#128197; Ordered: 10 Feb 2026<br>
+                    &#128230; Status: <strong>Shipped</strong> &#128666;<br>
+                    &#128179; Payment: Paid (UPI)<br><br>
+                    Items:<br>
+                    &bull; Samsung Galaxy Buds x1 — Rs 8,999<br><br>
+                    Total: Rs 8,999<br><br>
+                    Your order is on its way! Should arrive in 1-2 days.
+                </div>
+                <div class="chat-clear"></div>
+            </div>
+
+            <!-- Section 14: Troubleshooting -->
+            <h2 class="section-title page-break" id="s14"><span class="num">14</span> Troubleshooting</h2>
+
+            <h3>Common Issues &amp; Solutions</h3>
+            <table>
+                <thead>
+                    <tr><th>Issue</th><th>Cause</th><th>Solution</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>QR code expired</td><td>Took too long to scan</td><td>Run <code>openclaw channels login --channel whatsapp</code> again</td></tr>
+                    <tr><td>WhatsApp disconnected</td><td>Session expired / phone offline</td><td>Re-scan QR code, keep phone connected</td></tr>
+                    <tr><td>Bot not responding</td><td>Gateway crashed</td><td><code>sudo systemctl restart openclaw</code></td></tr>
+                    <tr><td>"Account banned"</td><td>Too many messages too fast</td><td>Use a new number, slow down message rate</td></tr>
+                    <tr><td>DB connection error</td><td>VPS IP blocked</td><td>Whitelist VPS IP in hPanel &rarr; Remote MySQL</td></tr>
+                    <tr><td>Slow responses</td><td>AI model is slow</td><td>Use a faster model or upgrade VPS RAM</td></tr>
+                    <tr><td>No skill loaded</td><td>Syntax error in skill file</td><td>Check <code>openclaw doctor</code> for errors</td></tr>
+                    <tr><td>Messages not arriving</td><td>Phone not linked</td><td>Run <code>openclaw channels status</code></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Diagnostic Commands</h3>
+            <pre><span class="comment"># Full system health check</span>
+openclaw doctor
+
+<span class="comment"># Test database connection manually</span>
+node -e "
+const mysql = require('mysql2/promise');
+(async () => {
+  const conn = await mysql.createConnection({
+    host: 'YOUR_HOST', user: 'YOUR_USER',
+    password: 'YOUR_PASS', database: 'YOUR_DB'
+  });
+  const [rows] = await conn.execute('SELECT COUNT(*) as cnt FROM products');
+  console.log('Products:', rows[0].cnt);
+  await conn.end();
+})().catch(console.error);
+"
+
+<span class="comment"># View real-time logs</span>
+sudo journalctl -u openclaw -f --no-pager</pre>
+
+            <h3>Rate Limiting Best Practices</h3>
+            <div class="info-box important">
+                <strong>&#128272; To Avoid WhatsApp Flagging:</strong>
+                <ul>
+                    <li>Don't send more than 1 message per second</li>
+                    <li>Don't send bulk messages to people who haven't messaged first</li>
+                    <li>Keep responses natural (not template-like)</li>
+                    <li>Use a profile picture and proper business name</li>
+                    <li>Start slowly (10-20 conversations/day) and gradually increase</li>
+                </ul>
+            </div>
+
+            <!-- Section 15: Cost Summary -->
+            <h2 class="section-title page-break" id="s15"><span class="num">15</span> Cost Summary</h2>
+
+            <h3>Monthly Operating Costs</h3>
+            <table>
+                <thead>
+                    <tr><th>Item</th><th>Free Option</th><th>Recommended</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>VPS Server</strong></td><td>—</td><td>Rs 500/month</td></tr>
+                    <tr><td><strong>AI Model</strong></td><td>Ollama (local, free)</td><td>Claude API: Rs 200-500/month</td></tr>
+                    <tr><td><strong>WhatsApp</strong></td><td class="highlight-free">Free (Baileys)</td><td class="highlight-free">Free</td></tr>
+                    <tr><td><strong>Phone Number</strong></td><td>Rs 200 SIM (one-time)</td><td>Rs 200 SIM (one-time)</td></tr>
+                    <tr><td><strong>OpenClaw</strong></td><td class="highlight-free">Free (open-source)</td><td class="highlight-free">Free</td></tr>
+                    <tr><td><strong>Domain/SSL</strong></td><td>Already have</td><td>Already have</td></tr>
+                    <tr><td><strong>Total</strong></td><td><strong>~Rs 500/month</strong></td><td><strong>~Rs 700-1000/month</strong></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Cost vs Return</h3>
+            <div class="cost-box">
+                <div class="big-number">60x ROI</div>
+                <div class="label">If each WhatsApp order averages Rs 2,000 and you get just 1 extra order/day</div>
+                <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                    Monthly revenue increase: <strong>Rs 60,000</strong> &bull;
+                    Monthly cost: <strong>Rs 700-1,000</strong>
+                </p>
+            </div>
+
+            <!-- Quick Start Checklist -->
+            <h2 class="section-title page-break" id="checklist"><span class="num">&#9989;</span> Quick Start Checklist</h2>
+
+            <div class="checklist">
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">1.</div><div>Buy a VPS (DigitalOcean / Hetzner)</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">2.</div><div>Buy a new SIM card for the bot</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">3.</div><div>Set up WhatsApp on the new number</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">4.</div><div>SSH into VPS and install Node.js</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">5.</div><div>Install OpenClaw</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">6.</div><div>Configure WhatsApp channel</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">7.</div><div>Scan QR code to link WhatsApp</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">8.</div><div>Create PickKart skill + tools</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">9.</div><div>Update database credentials in db.js</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">10.</div><div>Whitelist VPS IP in Hostinger Remote MySQL</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">11.</div><div>Choose AI model (Ollama or Claude API)</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">12.</div><div>Start gateway and test with personal phone</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">13.</div><div>Set up systemd service for 24/7 operation</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">14.</div><div>Share the WhatsApp number on your website</div></div>
+                <div class="checklist-item"><div class="checklist-box"></div><div class="checklist-num">15.</div><div>Monitor logs daily for the first week</div></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>OpenClaw + WhatsApp Setup Guide for PickKart</strong></p>
+            <p>pickkart.co.in &bull; Last updated: February 2026</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -108,40 +108,6 @@
         @endif
     </section>
 
-    {{-- ===== Category Grid ===== --}}
-    @if(isset($categories) && $categories->count() > 0)
-        <section class="py-12 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Shop by Category</h2>
-                    <p class="text-gray-500 mt-2">Browse our wide range of categories</p>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    @foreach($categories as $category)
-                        <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="group">
-                            <div class="bg-gray-50 rounded-xl p-4 text-center hover:bg-primary-50 hover:shadow-md transition-all duration-300">
-                                @if($category->image)
-                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden bg-gray-100">
-                                        <img src="{{ image_url($category->image) }}" alt="{{ $category->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy">
-                                    </div>
-                                @elseif($category->icon)
-                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-primary-100 flex items-center justify-center text-3xl">
-                                        {!! $category->icon !!}
-                                    </div>
-                                @else
-                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-primary-100 flex items-center justify-center">
-                                        <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                                    </div>
-                                @endif
-                                <h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-700 transition-colors line-clamp-2">{{ $category->name }}</h3>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
     {{-- ===== Shop by Brand ===== --}}
     @if(isset($brands) && $brands->count() > 0)
         <section class="py-10 bg-gray-50">

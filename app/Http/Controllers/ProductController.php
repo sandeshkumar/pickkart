@@ -23,9 +23,12 @@ class ProductController extends Controller
             }
         }
 
-        // Brand filter
+        // Brand filter (by slug)
         if ($request->filled('brand')) {
-            $query->where('brand_id', $request->brand);
+            $brand = Brand::where('slug', $request->brand)->first();
+            if ($brand) {
+                $query->where('brand_id', $brand->id);
+            }
         }
 
         // Price range filter
@@ -34,6 +37,11 @@ class ProductController extends Controller
         }
         if ($request->filled('max_price')) {
             $query->where('price', '<=', $request->max_price);
+        }
+
+        // Rating filter
+        if ($request->filled('rating')) {
+            $query->where('average_rating', '>=', (int) $request->rating);
         }
 
         // Search
@@ -49,10 +57,10 @@ class ProductController extends Controller
         // Sorting
         $sort = $request->get('sort', 'newest');
         match ($sort) {
-            'price_asc' => $query->orderBy('price', 'asc'),
-            'price_desc' => $query->orderBy('price', 'desc'),
-            'name_asc' => $query->orderBy('name', 'asc'),
-            'bestselling' => $query->orderBy('stock_quantity', 'asc'),
+            'price_low' => $query->orderBy('price', 'asc'),
+            'price_high' => $query->orderBy('price', 'desc'),
+            'rating' => $query->orderBy('average_rating', 'desc'),
+            'relevance' => $query->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc'),
             default => $query->latest(),
         };
 
