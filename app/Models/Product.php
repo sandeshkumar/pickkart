@@ -85,16 +85,6 @@ class Product extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
-    public function approvedReviews()
-    {
-        return $this->hasMany(Review::class)->where('status', 'approved');
-    }
-
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class);
@@ -121,16 +111,6 @@ class Product extends Model
             return round((($this->compare_at_price - $this->price) / $this->compare_at_price) * 100);
         }
         return 0;
-    }
-
-    public function getAverageRatingAttribute()
-    {
-        return $this->approvedReviews()->avg('rating') ?? 0;
-    }
-
-    public function getReviewCountAttribute()
-    {
-        return $this->approvedReviews()->count();
     }
 
     public function isInStock(): bool

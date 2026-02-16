@@ -377,39 +377,6 @@
         </section>
     @endif
 
-    {{-- ===== Customer Testimonials ===== --}}
-    <section class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">What Our Customers Say</h2>
-                <p class="text-gray-500 mt-2">Trusted by thousands of happy shoppers</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @php
-                    $testimonials = [
-                        ['name' => 'Sarah M.', 'initials' => 'SM', 'color' => 'bg-primary-100 text-primary-700', 'stars' => 5, 'text' => 'Amazing selection and super fast delivery! I ordered on Monday and it arrived Wednesday. The quality exceeded my expectations. Will definitely shop here again.'],
-                        ['name' => 'James R.', 'initials' => 'JR', 'color' => 'bg-green-100 text-green-700', 'stars' => 5, 'text' => 'Best prices I\'ve found online. The customer service team was incredibly helpful when I had questions about sizing. Highly recommend PickKart to everyone!'],
-                        ['name' => 'Priya K.', 'initials' => 'PK', 'color' => 'bg-orange-100 text-orange-700', 'stars' => 4, 'text' => 'Love the easy returns policy. I had to exchange a product and the process was seamless. Great variety of brands and products to choose from.'],
-                    ];
-                @endphp
-                @foreach($testimonials as $t)
-                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                        <div class="flex items-center gap-1 mb-3">
-                            @for($i = 0; $i < 5; $i++)
-                                <svg class="w-4 h-4 {{ $i < $t['stars'] ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            @endfor
-                        </div>
-                        <p class="text-sm text-gray-600 mb-4 leading-relaxed">"{{ $t['text'] }}"</p>
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full {{ $t['color'] }} flex items-center justify-center text-xs font-bold">{{ $t['initials'] }}</div>
-                            <span class="text-sm font-semibold text-gray-800">{{ $t['name'] }}</span>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
     {{-- ===== Trust Badges ===== --}}
     <section class="py-8 bg-gradient-to-r from-primary-50 via-blue-50 to-primary-50 border-t border-primary-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

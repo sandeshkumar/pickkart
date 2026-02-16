@@ -39,11 +39,6 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        // Rating filter
-        if ($request->filled('rating')) {
-            $query->where('average_rating', '>=', (int) $request->rating);
-        }
-
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
@@ -59,7 +54,6 @@ class ProductController extends Controller
         match ($sort) {
             'price_low' => $query->orderBy('price', 'asc'),
             'price_high' => $query->orderBy('price', 'desc'),
-            'rating' => $query->orderBy('average_rating', 'desc'),
             'relevance' => $query->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc'),
             default => $query->latest(),
         };
@@ -77,7 +71,7 @@ class ProductController extends Controller
     public function show($slug)
     {
         $product = Product::where('slug', $slug)
-            ->with(['images', 'variants', 'category', 'brand', 'tags', 'approvedReviews.user', 'attributeValues.attribute'])
+            ->with(['images', 'variants', 'category', 'brand', 'tags', 'attributeValues.attribute'])
             ->firstOrFail();
 
         $relatedProducts = Product::active()->inStock()

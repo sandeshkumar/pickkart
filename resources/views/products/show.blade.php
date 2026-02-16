@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', ($product->meta_title ?? $product->name ?? 'Product Details') . ' - PickKart')
-@section('meta_description', $product->meta_description ?? $product->short_description ?? 'View product details, reviews, and more at PickKart.')
+@section('meta_description', $product->meta_description ?? $product->short_description ?? 'View product details and more at PickKart.')
 
 @section('canonical_url', url('/products/' . $product->slug))
 @section('og_type', 'product')
@@ -67,38 +67,6 @@
             ,"priceValidUntil": "{{ now()->addMonths(3)->format('Y-m-d') }}"
             @endif
         }
-        @if($product->review_count > 0)
-        ,"aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "{{ number_format($product->average_rating, 1) }}",
-            "reviewCount": "{{ $product->review_count }}",
-            "bestRating": "5",
-            "worstRating": "1"
-        }
-        @endif
-        @if($product->approvedReviews && $product->approvedReviews->count() > 0)
-        ,"review": [
-            @foreach($product->approvedReviews->take(5) as $review)
-            {
-                "@type": "Review",
-                "author": {
-                    "@type": "Person",
-                    "name": @json($review->user->name ?? 'Anonymous')
-                },
-                "datePublished": "{{ $review->created_at->toIso8601String() }}",
-                "reviewRating": {
-                    "@type": "Rating",
-                    "ratingValue": "{{ $review->rating }}",
-                    "bestRating": "5"
-                }
-                @if($review->body)
-                ,"reviewBody": @json(Str::limit($review->body, 500))
-                @endif
-            }@if(!$loop->last),@endif
-
-            @endforeach
-        ]
-        @endif
     }
     </script>
 
@@ -354,22 +322,10 @@
                     {{-- Title --}}
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mt-1 mb-3">{{ $product->name ?? 'Premium Wireless Bluetooth Headphones with Active Noise Cancellation' }}</h1>
 
-                    {{-- Rating --}}
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="flex items-center gap-0.5">
-                            @php $avgRating = isset($product) ? round($product->average_rating) : 4; @endphp
-                            @for($s = 0; $s < 5; $s++)
-                                <svg class="w-5 h-5 {{ $s < $avgRating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            @endfor
-                        </div>
-                        <span class="text-sm text-primary-600 font-medium">{{ isset($product) ? number_format($product->average_rating, 1) : '4.2' }}</span>
-                        <span class="text-sm text-gray-400">|</span>
-                        <a href="#reviews" class="text-sm text-gray-500 hover:text-primary-600">{{ $product->review_count ?? 128 }} Reviews</a>
-                        <span class="text-sm text-gray-400">|</span>
-                        @if(($soldCount ?? 0) > 0)
-                            <span class="text-sm text-gray-500">{{ $soldCount }}+ Sold</span>
-                        @endif
-                    </div>
+                    {{-- Sold Count --}}
+                    @if(($soldCount ?? 0) > 0)
+                        <p class="text-sm text-gray-500 mb-4">{{ $soldCount }}+ Sold</p>
+                    @endif
 
                     {{-- Price (Dynamic) --}}
                     <div class="bg-gray-50 rounded-xl p-4 mb-6">
@@ -532,11 +488,6 @@
                             class="px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap">
                         Specifications
                     </button>
-                    <button @click="activeTab = 'reviews'" id="reviews"
-                            :class="activeTab === 'reviews' ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            class="px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap">
-                        Reviews ({{ $product->review_count ?? 128 }})
-                    </button>
                 </div>
 
                 {{-- Tab Content --}}
@@ -610,129 +561,6 @@
                         </div>
                     </div>
 
-                    {{-- Reviews Tab --}}
-                    <div x-show="activeTab === 'reviews'" x-cloak x-data="{ showReviewForm: false }">
-                        {{-- Write a Review Button --}}
-                        <div class="flex justify-end mb-6">
-                            @auth
-                                <button @click="showReviewForm = !showReviewForm" class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                    Write a Review
-                                </button>
-                            @else
-                                <a href="{{ url('/login') }}" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 text-sm font-medium">
-                                    Sign in to write a review
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </a>
-                            @endauth
-                        </div>
-
-                        {{-- Review Form Modal --}}
-                        @auth
-                        <div x-show="showReviewForm" x-cloak x-transition class="mb-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Write Your Review</h3>
-                            <form action="{{ route('reviews.store', $product->slug) }}" method="POST">
-                                @csrf
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Rating *</label>
-                                    <div class="flex gap-1" x-data="{ hoverRating: 0, selectedRating: 0 }">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <button type="button"
-                                                    @mouseenter="hoverRating = {{ $i }}"
-                                                    @mouseleave="hoverRating = 0"
-                                                    @click="selectedRating = {{ $i }}; document.getElementById('rating-input').value = {{ $i }}"
-                                                    :class="(hoverRating >= {{ $i }} || selectedRating >= {{ $i }}) ? 'text-yellow-400' : 'text-gray-300'"
-                                                    class="transition-colors">
-                                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                            </button>
-                                        @endfor
-                                        <input type="hidden" name="rating" id="rating-input" value="{{ old('rating') }}">
-                                    </div>
-                                    @error('rating') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                </div>
-                                <div class="mb-4">
-                                    <label for="review-title" class="block text-sm font-medium text-gray-700 mb-1">Title (optional)</label>
-                                    <input type="text" name="title" id="review-title" value="{{ old('title') }}" placeholder="Sum up your review" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                                    @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                </div>
-                                <div class="mb-4">
-                                    <label for="review-body" class="block text-sm font-medium text-gray-700 mb-1">Your Review *</label>
-                                    <textarea name="body" id="review-body" rows="4" placeholder="What did you like or dislike about this product?" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">{{ old('body') }}</textarea>
-                                    @error('body') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                </div>
-                                <div class="flex gap-3">
-                                    <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-6 py-2.5 rounded-lg transition-colors">Submit Review</button>
-                                    <button type="button" @click="showReviewForm = false" class="text-gray-600 hover:text-gray-800 text-sm font-medium px-4 py-2.5">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                        @endauth
-
-                        {{-- Review Summary --}}
-                        <div class="flex flex-col md:flex-row gap-8 mb-8 pb-8 border-b border-gray-100">
-                            <div class="text-center md:w-48 flex-shrink-0">
-                                <div class="text-5xl font-bold text-gray-900">{{ isset($product) ? number_format($product->average_rating, 1) : '4.2' }}</div>
-                                <div class="flex items-center justify-center gap-0.5 mt-2">
-                                    @for($s = 0; $s < 5; $s++)
-                                        <svg class="w-5 h-5 {{ $s < 4 ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                    @endfor
-                                </div>
-                                <p class="text-sm text-gray-500 mt-1">Based on {{ $product->review_count ?? 128 }} reviews</p>
-                            </div>
-                            <div class="flex-1 space-y-2">
-                                @php
-                                    $totalReviews = $product->approvedReviews->count();
-                                    $ratingDist = [];
-                                    for ($i = 5; $i >= 1; $i--) {
-                                        $count = $product->approvedReviews->where('rating', $i)->count();
-                                        $ratingDist[] = $totalReviews > 0 ? round(($count / $totalReviews) * 100) : 0;
-                                    }
-                                @endphp
-                                @for($r = 5; $r >= 1; $r--)
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-sm text-gray-600 w-6">{{ $r }}</span>
-                                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                        <div class="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                                            <div class="h-full bg-yellow-400 rounded-full" style="width: {{ $ratingDist[5 - $r] }}%"></div>
-                                        </div>
-                                        <span class="text-sm text-gray-500 w-10">{{ $ratingDist[5 - $r] }}%</span>
-                                    </div>
-                                @endfor
-                            </div>
-                        </div>
-
-                        {{-- Individual Reviews --}}
-                        <div class="space-y-6">
-                            @forelse($product->approvedReviews ?? [] as $review)
-                                <div class="border-b border-gray-100 pb-6">
-                                    <div class="flex items-start justify-between">
-                                        <div>
-                                            <div class="flex items-center gap-2 mb-1">
-                                                <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-semibold text-sm">{{ substr($review->user->name, 0, 1) }}</div>
-                                                <span class="text-sm font-medium text-gray-800">{{ $review->user->name }}</span>
-                                                <span class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</span>
-                                            </div>
-                                            <div class="flex items-center gap-0.5 mb-2">
-                                                @for($s = 0; $s < 5; $s++)
-                                                    <svg class="w-4 h-4 {{ $s < $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                                @endfor
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if($review->title)
-                                        <h4 class="text-sm font-semibold text-gray-800 mb-1">{{ $review->title }}</h4>
-                                    @endif
-                                    <p class="text-sm text-gray-600">{{ $review->body }}</p>
-                                </div>
-                            @empty
-                                <div class="text-center py-10">
-                                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                    <h3 class="text-lg font-semibold text-gray-700 mb-1">No reviews yet</h3>
-                                    <p class="text-sm text-gray-500">Be the first to share your thoughts on this product.</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

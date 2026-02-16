@@ -119,12 +119,6 @@
                                         <button @click="setFilter('brand', '')" class="hover:text-red-500">&times;</button>
                                     </span>
                                 </template>
-                                <template x-if="filters.rating">
-                                    <span class="inline-flex items-center gap-1 bg-white text-primary-700 text-xs px-2 py-1 rounded-full border border-primary-200">
-                                        <span x-text="filters.rating + '★ & Up'"></span>
-                                        <button @click="setFilter('rating', '')" class="hover:text-red-500">&times;</button>
-                                    </span>
-                                </template>
                                 <template x-if="filters.min_price > 0 || filters.max_price < 100000">
                                     <span class="inline-flex items-center gap-1 bg-white text-primary-700 text-xs px-2 py-1 rounded-full border border-primary-200">
                                         <span x-text="'₹' + filters.min_price + ' - ₹' + filters.max_price"></span>
@@ -209,30 +203,6 @@
                         </div>
                     </div>
 
-                    {{-- Rating Filter --}}
-                    <div class="bg-white rounded-xl border border-gray-100 p-5" x-data="{ open: true }">
-                        <button @click="open = !open" class="flex items-center justify-between w-full text-left">
-                            <h3 class="text-sm font-semibold text-gray-800 uppercase tracking-wider">Rating</h3>
-                            <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="open" x-collapse class="mt-3 space-y-2">
-                            @for($rating = 5; $rating >= 1; $rating--)
-                                <label class="flex items-center gap-2 cursor-pointer group">
-                                    <input type="radio" name="rating" value="{{ $rating }}"
-                                           :checked="filters.rating === '{{ $rating }}'"
-                                           @change="setFilter('rating', '{{ $rating }}')"
-                                           class="w-4 h-4 border-gray-300 text-accent-600 focus:ring-accent-500">
-                                    <div class="flex items-center gap-0.5">
-                                        @for($s = 0; $s < 5; $s++)
-                                            <svg class="w-4 h-4 {{ $s < $rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                        @endfor
-                                    </div>
-                                    <span class="text-xs text-gray-400">& Up</span>
-                                </label>
-                            @endfor
-                        </div>
-                    </div>
-
                     {{-- Clear Filters --}}
                     <button @click="clearAll()" class="block w-full text-center text-sm font-medium text-primary-600 hover:text-primary-800 py-2 transition-colors">
                         Clear All Filters
@@ -267,7 +237,6 @@
                                 <option value="relevance" {{ request('sort') == 'relevance' ? 'selected' : '' }}>Relevance</option>
                                 <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
                                 <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Highest Rated</option>
                             </select>
 
                             {{-- View Toggle --}}
@@ -353,26 +322,6 @@
                                 </div>
                                 <input type="range" min="0" max="100000" step="500" x-model.number="filters.max_price" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-accent-600">
                             </div>
-                            {{-- Mobile Rating --}}
-                            <div>
-                                <h4 class="text-sm font-semibold text-gray-800 mb-3">Rating</h4>
-                                <div class="space-y-2">
-                                    @for($r = 5; $r >= 1; $r--)
-                                        <label class="flex items-center gap-2 cursor-pointer">
-                                            <input type="radio" name="mobile_rating" value="{{ $r }}"
-                                                   :checked="filters.rating === '{{ $r }}'"
-                                                   @change="filters.rating = '{{ $r }}'"
-                                                   class="w-4 h-4 border-gray-300 text-accent-600 focus:ring-accent-500">
-                                            <div class="flex gap-0.5">
-                                                @for($s = 0; $s < 5; $s++)
-                                                    <svg class="w-4 h-4 {{ $s < $r ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                                @endfor
-                                            </div>
-                                            <span class="text-xs text-gray-400">& Up</span>
-                                        </label>
-                                    @endfor
-                                </div>
-                            </div>
                             <button @click="applyFilters(); showFilters = false" class="w-full btn-gradient-orange font-heading font-semibold py-3 rounded-lg">
                                 Apply Filters
                             </button>
@@ -419,12 +368,6 @@
                                 <div class="p-4 flex-1">
                                     <a href="{{ url('/products/' . $product->slug) }}" class="text-lg font-medium text-gray-800 hover:text-primary-600">{{ $product->name }}</a>
                                     <p class="text-sm text-gray-500 mt-1 line-clamp-2">{{ $product->short_description }}</p>
-                                    <div class="flex items-center gap-1 mt-2">
-                                        @for($s = 0; $s < 5; $s++)
-                                            <svg class="w-4 h-4 {{ $s < round($product->average_rating) ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                        @endfor
-                                        <span class="text-sm text-gray-500 ml-1">({{ $product->review_count }} reviews)</span>
-                                    </div>
                                     <div class="flex items-center gap-3 mt-3">
                                         <span class="text-xl font-bold text-gray-900">{{ format_currency($product->price) }}</span>
                                         @if($product->compare_at_price)
@@ -487,7 +430,6 @@
                 brand: '',
                 min_price: 0,
                 max_price: 100000,
-                rating: '',
                 sort: 'newest',
                 search: '',
             },
@@ -500,7 +442,6 @@
                 this.filters.brand = params.get('brand') || '';
                 this.filters.min_price = parseInt(params.get('min_price')) || 0;
                 this.filters.max_price = parseInt(params.get('max_price')) || 100000;
-                this.filters.rating = params.get('rating') || '';
                 this.filters.sort = params.get('sort') || 'newest';
                 this.filters.search = params.get('search') || '';
             },
@@ -518,7 +459,6 @@
                 if (this.filters.brand) url.searchParams.set('brand', this.filters.brand);
                 if (this.filters.min_price > 0) url.searchParams.set('min_price', this.filters.min_price);
                 if (this.filters.max_price < 100000) url.searchParams.set('max_price', this.filters.max_price);
-                if (this.filters.rating) url.searchParams.set('rating', this.filters.rating);
                 if (this.filters.sort && this.filters.sort !== 'newest') url.searchParams.set('sort', this.filters.sort);
 
                 window.location.href = url.toString();
@@ -531,7 +471,7 @@
             },
 
             hasActiveFilters() {
-                return this.filters.category || this.filters.brand || this.filters.rating ||
+                return this.filters.category || this.filters.brand ||
                        this.filters.min_price > 0 || this.filters.max_price < 100000;
             },
 
