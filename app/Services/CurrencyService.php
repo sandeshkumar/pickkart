@@ -14,8 +14,8 @@ class CurrencyService
     {
         return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
             return [
-                'code'               => Setting::get('currency_code', 'USD'),
-                'symbol'             => Setting::get('currency_symbol', '$'),
+                'code'               => Setting::get('currency_code', 'INR'),
+                'symbol'             => Setting::get('currency_symbol', '₹'),
                 'position'           => Setting::get('currency_symbol_position', 'before'),
                 'decimal_places'     => (int) Setting::get('currency_decimal_places', '2'),
                 'thousand_separator' => Setting::get('currency_thousand_separator', ','),

@@ -148,10 +148,10 @@
                                     <input type="number" x-model="maxPrice" name="max_price" placeholder="Max" class="w-full pl-7 pr-2 py-2 text-sm border border-gray-200 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-200 outline-none">
                                 </div>
                             </div>
-                            <input type="range" min="0" max="1000" x-model="maxPrice" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-accent-600">
+                            <input type="range" min="0" max="100000" x-model="maxPrice" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-accent-600">
                             <div class="flex justify-between text-xs text-gray-400 mt-1">
-                                <span>$0</span>
-                                <span x-text="'$' + maxPrice"></span>
+                                <span>&#8377;0</span>
+                                <span x-text="'&#8377;' + maxPrice"></span>
                             </div>
                         </div>
                     </div>

@@ -196,7 +196,7 @@
          class="bg-gradient-to-r from-accent-600 via-accent-500 to-accent-600 text-white text-center text-sm py-2.5 px-4 relative">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
             <span class="animate-pulse">&#127881;</span>
-            <span>Free shipping on orders over $50! Use code <strong class="bg-white/20 px-1.5 py-0.5 rounded text-xs">PICKKART10</strong> for 10% off your first order.</span>
+            <span>Free shipping on orders over &#8377;499! Use code <strong class="bg-white/20 px-1.5 py-0.5 rounded text-xs">PICKKART10</strong> for 10% off your first order.</span>
         </div>
         <button @click="dismissed = true; localStorage.setItem('pk_promo_dismissed', '1')"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors" aria-label="Dismiss promo">

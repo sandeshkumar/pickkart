@@ -97,7 +97,7 @@
                     <div class="max-w-xl">
                         <p class="text-primary-200 text-sm font-semibold mb-2 uppercase tracking-wider">Welcome to PickKart</p>
                         <h2 class="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">Shop Smart, Live Better</h2>
-                        <p class="text-primary-100 mb-6">Discover millions of products at unbeatable prices with free shipping on orders over $50.</p>
+                        <p class="text-primary-100 mb-6">Discover millions of products at unbeatable prices with free shipping on orders over &#8377;499.</p>
                         <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 btn-gradient-orange px-6 py-3 rounded-lg font-heading font-semibold">
                             Start Shopping
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -454,7 +454,7 @@
                     </div>
                     <div>
                         <h3 class="font-semibold text-gray-800 text-sm">Free Shipping</h3>
-                        <p class="text-xs text-gray-500">On orders over $50</p>
+                        <p class="text-xs text-gray-500">On orders over &#8377;499</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 justify-center md:justify-start">

@@ -441,7 +441,7 @@
                     @if($shipping > 0)
                         <div class="mt-4 bg-yellow-50 border border-yellow-100 rounded-lg p-3">
                             <p class="text-xs text-yellow-700">
-                                <strong>Free shipping</strong> on orders over $500.00. Add <strong>{{ format_currency(500 - $subtotal) }}</strong> more to qualify!
+                                <strong>Free shipping</strong> on orders over &#8377;499. Add <strong>{{ format_currency(499 - $subtotal) }}</strong> more to qualify!
                             </p>
                         </div>
                     @endif
