@@ -225,6 +225,25 @@ class ProductResource extends Resource
                             ])
                             ->columns(2),
 
+                        Forms\Components\Tabs\Tab::make('Images')
+                            ->schema([
+                                Forms\Components\FileUpload::make('product_images')
+                                    ->label('Product Images')
+                                    ->image()
+                                    ->multiple()
+                                    ->reorderable()
+                                    ->directory('products')
+                                    ->disk('public')
+                                    ->imageResizeMode('cover')
+                                    ->imageCropAspectRatio('1:1')
+                                    ->imageResizeTargetWidth('800')
+                                    ->imageResizeTargetHeight('800')
+                                    ->maxSize(2048)
+                                    ->maxFiles(10)
+                                    ->helperText('Upload up to 10 images. First image will be set as primary. Max 2MB each.')
+                                    ->columnSpanFull(),
+                            ]),
+
                         Forms\Components\Tabs\Tab::make('SEO')
                             ->schema([
                                 Forms\Components\TextInput::make('meta_title')
@@ -249,6 +268,7 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('images.path')
                     ->label('Image')
+                    ->disk('public')
                     ->circular()
                     ->stacked()
                     ->limit(1)

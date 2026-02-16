@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PickKart Admin Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --primary: #6366f1;
+    --primary-light: #eef2ff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+    --bg-code: #f8fafc;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 14px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    background: #fff;
+  }
+
+  /* Cover / Title */
+  .cover {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 3px solid var(--primary);
+    margin-bottom: 40px;
+  }
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+  }
+  .cover .subtitle {
+    font-size: 16px;
+    color: var(--text-light);
+    margin-bottom: 16px;
+  }
+  .cover .version {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--primary-light);
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-bottom: 40px;
+    page-break-after: always;
+  }
+  .toc h2 {
+    font-size: 20px;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .toc ol {
+    columns: 2;
+    column-gap: 40px;
+    padding-left: 20px;
+  }
+  .toc li {
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .toc a { color: var(--primary); text-decoration: none; }
+
+  /* Headings */
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 48px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary-light);
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 32px;
+    margin-bottom: 12px;
+    page-break-after: avoid;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-top: 24px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+
+  /* Paragraphs and lists */
+  p { margin-bottom: 12px; }
+  ul, ol { padding-left: 24px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 13px;
+    page-break-inside: avoid;
+  }
+  th {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 12px;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) { background: #f8fafc; }
+  tr:hover { background: var(--primary-light); }
+
+  /* Code blocks */
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 12px 0 20px;
+    page-break-inside: avoid;
+  }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--bg-code);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  /* Blockquotes / Tips */
+  blockquote {
+    background: #fffbeb;
+    border-left: 4px solid var(--warning);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0 20px;
+    font-size: 13px;
+    page-break-inside: avoid;
+  }
+  blockquote strong { color: #92400e; }
+
+  /* Horizontal rules / section dividers */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* Bold emphasis */
+  strong { font-weight: 600; }
+
+  /* Section numbering badge */
+  .section-badge {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* Print styles */
+  @media print {
+    body {
+      padding: 20px;
+      font-size: 12px;
+      max-width: 100%;
+    }
+    .cover { padding: 40px 0 30px; }
+    .cover h1 { font-size: 28px; }
+    h2 { font-size: 20px; margin-top: 32px; }
+    h3 { font-size: 16px; margin-top: 24px; }
+    h4 { font-size: 14px; margin-top: 16px; }
+    pre { font-size: 11px; padding: 10px 14px; }
+    table { font-size: 11px; }
+    th { padding: 6px 8px; }
+    td { padding: 5px 8px; }
+    blockquote { padding: 8px 12px; font-size: 11px; }
+    .no-print { display: none; }
+
+    @page {
+      margin: 1.5cm;
+      size: A4;
+    }
+  }
+
+  /* Print button */
+  .print-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+    z-index: 100;
+    transition: all 0.2s;
+  }
+  .print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>PickKart Admin Guide</h1>
+  <p class="subtitle">Complete guide for managing your PickKart e-commerce store</p>
+  <p class="version">Last updated: February 2026</p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#categories">Managing Categories</a></li>
+    <li><a href="#brands">Managing Brands</a></li>
+    <li><a href="#products">Managing Products</a></li>
+    <li><a href="#variants">Product Variants</a></li>
+    <li><a href="#images">Product Images</a></li>
+    <li><a href="#orders">Managing Orders</a></li>
+    <li><a href="#coupons">Managing Coupons</a></li>
+    <li><a href="#banners">Managing Banners</a></li>
+    <li><a href="#pages">Managing Pages</a></li>
+    <li><a href="#reviews">Managing Reviews</a></li>
+    <li><a href="#users">Managing Users &amp; Roles</a></li>
+    <li><a href="#seo">SEO Settings</a></li>
+    <li><a href="#setup-order">Recommended Setup Order</a></li>
+  </ol>
+</div>
+
+<!-- 1. GETTING STARTED -->
+<h2 id="getting-started"><span class="section-badge">1</span> Getting Started</h2>
+
+<h3>Accessing the Admin Panel</h3>
+<ul>
+  <li><strong>URL:</strong> <code>https://yourdomain.com/admin</code></li>
+  <li>Login with your admin email and password.</li>
+  <li>Only users with <strong>super-admin</strong> or <strong>admin</strong> roles can access the panel.</li>
+</ul>
+
+<h3>Dashboard Overview</h3>
+<p>After logging in, you'll see the admin dashboard with navigation on the left sidebar:</p>
+<ul>
+  <li><strong>Products</strong> &mdash; Manage your product catalog</li>
+  <li><strong>Categories</strong> &mdash; Organize products into categories</li>
+  <li><strong>Brands</strong> &mdash; Manage product brands</li>
+  <li><strong>Orders</strong> &mdash; View and manage customer orders</li>
+  <li><strong>Users</strong> &mdash; Manage customers, sellers, and admins</li>
+  <li><strong>Coupons</strong> &mdash; Create discount coupons</li>
+  <li><strong>Banners</strong> &mdash; Manage homepage banners</li>
+  <li><strong>Pages</strong> &mdash; Create static pages (About Us, Privacy Policy, etc.)</li>
+  <li><strong>Reviews</strong> &mdash; Moderate customer reviews</li>
+</ul>
+
+<hr>
+
+<!-- 2. CATEGORIES -->
+<h2 id="categories"><span class="section-badge">2</span> Managing Categories</h2>
+
+<p>Categories help organize your products. PickKart supports <strong>hierarchical categories</strong> (parent and subcategories).</p>
+
+<h3>Creating a Category</h3>
+<p><strong>Navigate to:</strong> Admin &gt; Categories &gt; <strong>New Category</strong></p>
+
+<table>
+  <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+  <tr><td><strong>Name</strong></td><td>Yes</td><td>Category name (e.g., "Electronics"). Slug is auto-generated.</td></tr>
+  <tr><td><strong>Slug</strong></td><td>Yes</td><td>URL-friendly name. Auto-fills from Name.</td></tr>
+  <tr><td><strong>Parent Category</strong></td><td>No</td><td>Leave empty for top-level category. Select a parent for subcategories.</td></tr>
+  <tr><td><strong>Description</strong></td><td>No</td><td>Brief description of the category (max 1000 characters).</td></tr>
+  <tr><td><strong>Icon</strong></td><td>No</td><td>Icon identifier (e.g., <code>heroicon-o-cpu-chip</code>).</td></tr>
+  <tr><td><strong>Image</strong></td><td>No</td><td>Upload a category image.</td></tr>
+  <tr><td><strong>Is Active</strong></td><td>&mdash;</td><td>Toggle ON to make visible on storefront. Default: ON.</td></tr>
+  <tr><td><strong>Sort Order</strong></td><td>&mdash;</td><td>Controls display order. Lower numbers appear first. Default: 0.</td></tr>
+</table>
+
+<p><strong>SEO Fields (collapsible section):</strong></p>
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td><strong>Meta Title</strong></td><td>Page title for search engines (recommended: 50&ndash;60 characters).</td></tr>
+  <tr><td><strong>Meta Description</strong></td><td>Page description for search engines (recommended: 150&ndash;160 characters).</td></tr>
+</table>
+
+<h3>Category Hierarchy Example</h3>
+<pre>Electronics              (Parent &mdash; Sort Order: 1)
+  &#9500;&#9472;&#9472; Smartphones        (Child of Electronics &mdash; Sort Order: 1)
+  &#9500;&#9472;&#9472; Laptops            (Child of Electronics &mdash; Sort Order: 2)
+  &#9500;&#9472;&#9472; Tablets            (Child of Electronics &mdash; Sort Order: 3)
+  &#9492;&#9472;&#9472; Accessories        (Child of Electronics &mdash; Sort Order: 4)
+
+Clothing                 (Parent &mdash; Sort Order: 2)
+  &#9500;&#9472;&#9472; Men's Wear         (Child of Clothing)
+  &#9500;&#9472;&#9472; Women's Wear       (Child of Clothing)
+  &#9492;&#9472;&#9472; Kids' Wear         (Child of Clothing)</pre>
+
+<blockquote><strong>Tip:</strong> Always create <strong>parent categories first</strong>, then create subcategories by selecting the parent.</blockquote>
+
+<h3>Editing &amp; Deleting Categories</h3>
+<ul>
+  <li>Click on any category name in the list to <strong>edit</strong> it.</li>
+  <li>Use the <strong>delete</strong> button to remove a category.</li>
+  <li>You can <strong>filter</strong> categories by active status or parent category using the filter icon.</li>
+</ul>
+
+<hr>
+
+<!-- 3. BRANDS -->
+<h2 id="brands"><span class="section-badge">3</span> Managing Brands</h2>
+
+<p>Brands represent product manufacturers or labels.</p>
+
+<h3>Creating a Brand</h3>
+<p><strong>Navigate to:</strong> Admin &gt; Brands &gt; <strong>New Brand</strong></p>
+
+<table>
+  <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+  <tr><td><strong>Name</strong></td><td>Yes</td><td>Brand name (e.g., "Samsung"). Slug is auto-generated.</td></tr>
+  <tr><td><strong>Slug</strong></td><td>Yes</td><td>URL-friendly name. Auto-fills from Name.</td></tr>
+  <tr><td><strong>Description</strong></td><td>No</td><td>Brief description of the brand (max 1000 characters).</td></tr>
+  <tr><td><strong>Logo</strong></td><td>No</td><td>Upload the brand's logo image.</td></tr>
+  <tr><td><strong>Website</strong></td><td>No</td><td>Brand's official website URL.</td></tr>
+  <tr><td><strong>Is Active</strong></td><td>&mdash;</td><td>Toggle ON to make visible. Default: ON.</td></tr>
+</table>
+
+<h3>Example Brands</h3>
+<table>
+  <tr><th>Name</th><th>Description</th><th>Website</th></tr>
+  <tr><td>Samsung</td><td>Leading electronics manufacturer</td><td>https://samsung.com</td></tr>
+  <tr><td>Nike</td><td>Global sportswear brand</td><td>https://nike.com</td></tr>
+  <tr><td>IKEA</td><td>Furniture and home goods</td><td>https://ikea.com</td></tr>
+  <tr><td>Bosch</td><td>Power tools and appliances</td><td>https://bosch.com</td></tr>
+</table>
+
+<hr>
+
+<!-- 4. PRODUCTS -->
+<h2 id="products"><span class="section-badge">4</span> Managing Products</h2>
+
+<p>Products are the core of your store. Each product belongs to a <strong>category</strong> and optionally to a <strong>brand</strong>.</p>
+
+<h3>Creating a Product</h3>
+<p><strong>Navigate to:</strong> Admin &gt; Products &gt; <strong>New Product</strong></p>
+<p>The product form is organized into <strong>6 tabs</strong>:</p>
+
+<h3>Tab 1: Basic Information</h3>
+<table>
+  <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+  <tr><td><strong>Name</strong></td><td>Yes</td><td>Product name (e.g., "Samsung Galaxy S25 Ultra").</td></tr>
+  <tr><td><strong>Slug</strong></td><td>Yes</td><td>Auto-generated from name. URL-friendly identifier.</td></tr>
+  <tr><td><strong>SKU</strong></td><td>No</td><td>Stock Keeping Unit. Unique product code (e.g., "SAM-S25U-001").</td></tr>
+  <tr><td><strong>Category</strong></td><td>Yes</td><td>Select from your categories. Searchable dropdown.</td></tr>
+  <tr><td><strong>Brand</strong></td><td>No</td><td>Select from your brands. Searchable dropdown.</td></tr>
+  <tr><td><strong>Seller</strong></td><td>No</td><td>Assign to a seller (for multi-vendor setup).</td></tr>
+  <tr><td><strong>Short Description</strong></td><td>No</td><td>Brief summary shown in product listings (max 500 characters).</td></tr>
+  <tr><td><strong>Description</strong></td><td>No</td><td>Full product description with rich text editor (bold, lists, images, etc.).</td></tr>
+  <tr><td><strong>Tags</strong></td><td>No</td><td>Add keywords for filtering. You can create new tags inline.</td></tr>
+</table>
+
+<h3>Tab 2: Pricing</h3>
+<table>
+  <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+  <tr><td><strong>Price</strong></td><td>Yes</td><td>The selling price customers pay (e.g., &#8377;89,999.00).</td></tr>
+  <tr><td><strong>Compare at Price</strong></td><td>No</td><td>Original/MRP price before discount. Shown as strikethrough on storefront. Must be higher than Price.</td></tr>
+  <tr><td><strong>Cost Price</strong></td><td>No</td><td>Your purchase cost. Hidden from customers. Used for profit tracking.</td></tr>
+</table>
+
+<p><strong>Pricing Example:</strong></p>
+<pre>Price:            &#8377;89,999.00   &larr; Customer pays this
+Compare at Price: &#8377;99,999.00   &larr; Shown as original price (strikethrough)
+Cost Price:       &#8377;70,000.00   &larr; Your cost (hidden)
+
+Customer sees:    &#8377;89,999  <s>&#8377;99,999</s>  (10% OFF)
+Your profit:      &#8377;19,999 per unit</pre>
+
+<h3>Tab 3: Inventory</h3>
+<table>
+  <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+  <tr><td><strong>Stock Quantity</strong></td><td>Yes</td><td>Number of units available. Default: 0.</td></tr>
+  <tr><td><strong>Low Stock Threshold</strong></td><td>No</td><td>Alert when stock drops below this number. Default: 5.</td></tr>
+  <tr><td><strong>Barcode</strong></td><td>No</td><td>Product barcode (EAN, UPC, etc.).</td></tr>
+  <tr><td><strong>Weight</strong></td><td>No</td><td>Product weight (number).</td></tr>
+  <tr><td><strong>Weight Unit</strong></td><td>No</td><td>kg, g, lb, or oz. Default: kg.</td></tr>
+  <tr><td><strong>Length</strong></td><td>No</td><td>Product length in cm.</td></tr>
+  <tr><td><strong>Width</strong></td><td>No</td><td>Product width in cm.</td></tr>
+  <tr><td><strong>Height</strong></td><td>No</td><td>Product height in cm.</td></tr>
+</table>
+
+<blockquote>
+  <strong>Stock Color Indicators in Product List:</strong><br>
+  <span style="color:#22c55e">&#9679;</span> <strong>Green</strong> &mdash; In stock (above threshold)<br>
+  <span style="color:#f59e0b">&#9679;</span> <strong>Yellow</strong> &mdash; Low stock (at or below threshold)<br>
+  <span style="color:#ef4444">&#9679;</span> <strong>Red</strong> &mdash; Out of stock (0 units)
+</blockquote>
+
+<h3>Tab 4: Options &amp; Variants</h3>
+<p>This is where you define product variations like <strong>Color, Size, Storage</strong>, etc. See <a href="#variants">Section 5: Product Variants</a> for detailed instructions.</p>
+
+<h3>Tab 5: Status &amp; Visibility</h3>
+<table>
+  <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+  <tr><td><strong>Status</strong></td><td>Yes</td><td><code>Draft</code> (hidden), <code>Active</code> (live), or <code>Inactive</code> (temporarily hidden). Default: Draft.</td></tr>
+  <tr><td><strong>Is Featured</strong></td><td>&mdash;</td><td>Toggle ON to display on homepage featured section.</td></tr>
+  <tr><td><strong>Is Digital</strong></td><td>&mdash;</td><td>Toggle ON for downloadable/digital products (no shipping).</td></tr>
+  <tr><td><strong>Digital File Path</strong></td><td>No</td><td>File URL for digital products. Only visible when "Is Digital" is ON.</td></tr>
+  <tr><td><strong>Published At</strong></td><td>No</td><td>Schedule when the product goes live.</td></tr>
+</table>
+
+<p><strong>Product Statuses:</strong></p>
+<table>
+  <tr><th>Status</th><th>Visible on Storefront</th><th>Use Case</th></tr>
+  <tr><td><strong>Draft</strong></td><td>No</td><td>Work in progress. Still adding details.</td></tr>
+  <tr><td><strong>Active</strong></td><td>Yes</td><td>Live and available for purchase.</td></tr>
+  <tr><td><strong>Inactive</strong></td><td>No</td><td>Temporarily hidden (seasonal, out of stock, etc.).</td></tr>
+</table>
+
+<h3>Tab 6: SEO</h3>
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td><strong>Meta Title</strong></td><td>Title shown in Google search results. Recommended: 50&ndash;60 characters.</td></tr>
+  <tr><td><strong>Meta Description</strong></td><td>Description shown in Google search results. Recommended: 150&ndash;160 characters.</td></tr>
+</table>
+
+<p><strong>Example:</strong></p>
+<pre>Meta Title:       Samsung Galaxy S25 Ultra - Buy Online at Best Price | PickKart
+Meta Description: Buy Samsung Galaxy S25 Ultra with AI features, 200MP camera,
+                  and titanium design. Free shipping, EMI available. Shop now on PickKart.</pre>
+
+<h3>Bulk Actions</h3>
+<p>In the product list, you can select multiple products and apply bulk actions:</p>
+<ul>
+  <li><strong>Set Active</strong> &mdash; Publish selected products</li>
+  <li><strong>Set Inactive</strong> &mdash; Hide selected products</li>
+  <li><strong>Toggle Featured</strong> &mdash; Add/remove from featured section</li>
+  <li><strong>Delete</strong> &mdash; Move to trash (soft delete)</li>
+  <li><strong>Force Delete</strong> &mdash; Permanently delete</li>
+  <li><strong>Restore</strong> &mdash; Recover deleted products</li>
+</ul>
+
+<hr>
+
+<!-- 5. PRODUCT VARIANTS -->
+<h2 id="variants"><span class="section-badge">5</span> Product Variants</h2>
+
+<p>Variants allow a single product to have multiple options like different colors, sizes, or configurations.</p>
+
+<h3>How Variants Work</h3>
+<p>PickKart supports up to <strong>3 option levels</strong> per product:</p>
+<pre>Option 1: Color     &rarr; Red, Blue, Black
+Option 2: Size      &rarr; S, M, L, XL
+Option 3: Material  &rarr; Cotton, Polyester</pre>
+<p>Each unique combination becomes a <strong>variant</strong> with its own price, SKU, and stock.</p>
+
+<hr>
+
+<h3>Full Walkthrough: Adding a T-Shirt with Color &amp; Size Variants</h3>
+
+<h4>Step 1 &mdash; Create the Product</h4>
+<p><strong>Go to:</strong> <code>https://yourdomain.com/admin/products/create</code></p>
+<p><strong>Or:</strong> Sidebar &gt; <strong>Products</strong> &gt; Click <strong>"New Product"</strong> button (top right corner)</p>
+<p>Fill in the <strong>Basic Information</strong> tab:</p>
+<table>
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td>Name</td><td>Nike Dri-FIT Running T-Shirt</td></tr>
+  <tr><td>SKU</td><td>NIKE-DRFIT-001</td></tr>
+  <tr><td>Category</td><td>Men's Wear</td></tr>
+  <tr><td>Brand</td><td>Nike</td></tr>
+  <tr><td>Short Description</td><td>Lightweight running t-shirt with moisture-wicking technology</td></tr>
+  <tr><td>Description</td><td>(Add full product details using the rich text editor)</td></tr>
+  <tr><td>Tags</td><td>t-shirt, running, nike, sportswear</td></tr>
+</table>
+
+<h4>Step 2 &mdash; Set Base Price</h4>
+<p>Click the <strong>"Pricing"</strong> tab (Tab 2):</p>
+<table>
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td>Price</td><td>2,499.00</td></tr>
+  <tr><td>Compare at Price</td><td>3,499.00</td></tr>
+  <tr><td>Cost Price</td><td>1,200.00</td></tr>
+</table>
+
+<h4>Step 3 &mdash; Set Base Inventory</h4>
+<p>Click the <strong>"Inventory"</strong> tab (Tab 3):</p>
+<table>
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td>Stock Quantity</td><td>100</td></tr>
+  <tr><td>Low Stock Threshold</td><td>10</td></tr>
+  <tr><td>Weight</td><td>0.25</td></tr>
+  <tr><td>Weight Unit</td><td>kg</td></tr>
+</table>
+
+<h4>Step 4 &mdash; Define Options</h4>
+<p>Click the <strong>"Options &amp; Variants"</strong> tab (Tab 4).</p>
+<p>You'll see a repeater field labeled <strong>"Options"</strong> with an <strong>"Add to options"</strong> button at the bottom.</p>
+
+<p><strong>Add Option 1 &mdash; Color:</strong></p>
+<ol>
+  <li>Click <strong>"Add to options"</strong></li>
+  <li>In the <strong>Name</strong> field, type: <code>Color</code></li>
+  <li>In the <strong>Values</strong> field, type each value and press <strong>Enter</strong> after each one:
+    <ul>
+      <li>Type <code>Navy Blue</code> &rarr; press Enter</li>
+      <li>Type <code>Black</code> &rarr; press Enter</li>
+      <li>Type <code>White</code> &rarr; press Enter</li>
+      <li>Type <code>Red</code> &rarr; press Enter</li>
+    </ul>
+  </li>
+</ol>
+<pre>Name:   Color
+Values: [Navy Blue] [Black] [White] [Red]</pre>
+
+<p><strong>Add Option 2 &mdash; Size:</strong></p>
+<ol>
+  <li>Click <strong>"Add to options"</strong> again</li>
+  <li><strong>Name:</strong> <code>Size</code></li>
+  <li><strong>Values:</strong> Type each and press Enter:
+    <ul>
+      <li><code>S</code> &rarr; Enter</li>
+      <li><code>M</code> &rarr; Enter</li>
+      <li><code>L</code> &rarr; Enter</li>
+      <li><code>XL</code> &rarr; Enter</li>
+    </ul>
+  </li>
+</ol>
+<pre>Name:   Size
+Values: [S] [M] [L] [XL]</pre>
+
+<blockquote>You can add up to <strong>3 options</strong> maximum. Each option can have unlimited values.</blockquote>
+
+<h4>Step 5 &mdash; Set Status &amp; Save</h4>
+<p>Click the <strong>"Status &amp; Visibility"</strong> tab (Tab 5):</p>
+<table>
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td>Status</td><td>Draft (keep as draft until variants are ready)</td></tr>
+  <tr><td>Is Featured</td><td>OFF (for now)</td></tr>
+</table>
+<p>Now click <strong>"Create"</strong> button at the bottom right to <strong>save the product</strong>.</p>
+
+<blockquote><strong>IMPORTANT:</strong> You MUST save the product first before you can generate variants. The Generate Variants button only appears on the edit page after the product is saved.</blockquote>
+
+<h4>Step 6 &mdash; Generate Variants</h4>
+<p>After saving, you'll be redirected to the product <strong>edit</strong> page:</p>
+<p><strong>URL:</strong> <code>https://yourdomain.com/admin/products/{id}/edit</code></p>
+<p><strong>Scroll down below the 6 tabs.</strong> You'll see two sections:</p>
+<ul>
+  <li><strong>Variants</strong> (relation manager table)</li>
+  <li><strong>Images</strong> (relation manager table)</li>
+</ul>
+<p>In the <strong>Variants</strong> section header:</p>
+<ol>
+  <li>Click the <strong>"Generate Variants"</strong> button (top-right of the Variants table)</li>
+  <li>A confirmation dialog appears: <em>"Are you sure?"</em></li>
+  <li>Click <strong>"Confirm"</strong></li>
+  <li>A green notification appears: <em>"16 variants created successfully"</em></li>
+</ol>
+
+<p>The system automatically creates <strong>all possible combinations</strong>:</p>
+<table>
+  <tr><th>Color</th><th>Size</th><th>Variant Name</th></tr>
+  <tr><td>Navy Blue</td><td>S</td><td>Navy Blue / S</td></tr>
+  <tr><td>Navy Blue</td><td>M</td><td>Navy Blue / M</td></tr>
+  <tr><td>Navy Blue</td><td>L</td><td>Navy Blue / L</td></tr>
+  <tr><td>Navy Blue</td><td>XL</td><td>Navy Blue / XL</td></tr>
+  <tr><td>Black</td><td>S</td><td>Black / S</td></tr>
+  <tr><td>Black</td><td>M</td><td>Black / M</td></tr>
+  <tr><td>Black</td><td>L</td><td>Black / L</td></tr>
+  <tr><td>Black</td><td>XL</td><td>Black / XL</td></tr>
+  <tr><td>White</td><td>S</td><td>White / S</td></tr>
+  <tr><td>White</td><td>M</td><td>White / M</td></tr>
+  <tr><td>White</td><td>L</td><td>White / L</td></tr>
+  <tr><td>White</td><td>XL</td><td>White / XL</td></tr>
+  <tr><td>Red</td><td>S</td><td>Red / S</td></tr>
+  <tr><td>Red</td><td>M</td><td>Red / M</td></tr>
+  <tr><td>Red</td><td>L</td><td>Red / L</td></tr>
+  <tr><td>Red</td><td>XL</td><td>Red / XL</td></tr>
+</table>
+<p><strong>Total: 4 colors &times; 4 sizes = 16 variants</strong></p>
+
+<h4>Step 7 &mdash; Edit Individual Variants</h4>
+<p>Each variant now appears as a row in the table. Click the <strong>pencil (edit) icon</strong> on any row to customize it.</p>
+<p><strong>Example &mdash; Editing variant "Navy Blue / M":</strong></p>
+<table>
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td><strong>Name</strong></td><td>Navy Blue / M (auto-generated, you can rename)</td></tr>
+  <tr><td><strong>SKU</strong></td><td>NIKE-DRFIT-NB-M</td></tr>
+  <tr><td><strong>Option 1 (Color)</strong></td><td>Navy Blue (pre-filled)</td></tr>
+  <tr><td><strong>Option 2 (Size)</strong></td><td>M (pre-filled)</td></tr>
+  <tr><td><strong>Price</strong></td><td>2,499 (leave empty to use base product price)</td></tr>
+  <tr><td><strong>Compare at Price</strong></td><td>3,499</td></tr>
+  <tr><td><strong>Stock Quantity</strong></td><td>20</td></tr>
+  <tr><td><strong>Is Active</strong></td><td>ON</td></tr>
+  <tr><td><strong>Sort Order</strong></td><td>0</td></tr>
+</table>
+<p>Click <strong>Save</strong> to update the variant.</p>
+
+<p><strong>Complete variant pricing table example:</strong></p>
+<table>
+  <tr><th>Variant</th><th>SKU</th><th>Price (&#8377;)</th><th>Stock</th></tr>
+  <tr><td>Navy Blue / S</td><td>NIKE-DRFIT-NB-S</td><td>2,499</td><td>15</td></tr>
+  <tr><td>Navy Blue / M</td><td>NIKE-DRFIT-NB-M</td><td>2,499</td><td>20</td></tr>
+  <tr><td>Navy Blue / L</td><td>NIKE-DRFIT-NB-L</td><td>2,499</td><td>20</td></tr>
+  <tr><td style="background:#eef2ff"><strong>Navy Blue / XL</strong></td><td>NIKE-DRFIT-NB-XL</td><td style="color:#6366f1"><strong>2,699</strong></td><td>10</td></tr>
+  <tr><td>Black / S</td><td>NIKE-DRFIT-BK-S</td><td>2,499</td><td>15</td></tr>
+  <tr><td>Black / M</td><td>NIKE-DRFIT-BK-M</td><td>2,499</td><td>25</td></tr>
+  <tr><td>Black / L</td><td>NIKE-DRFIT-BK-L</td><td>2,499</td><td>25</td></tr>
+  <tr><td style="background:#eef2ff"><strong>Black / XL</strong></td><td>NIKE-DRFIT-BK-XL</td><td style="color:#6366f1"><strong>2,699</strong></td><td>10</td></tr>
+  <tr><td>White / S</td><td>NIKE-DRFIT-WH-S</td><td>2,499</td><td>10</td></tr>
+  <tr><td>White / M</td><td>NIKE-DRFIT-WH-M</td><td>2,499</td><td>15</td></tr>
+  <tr><td>White / L</td><td>NIKE-DRFIT-WH-L</td><td>2,499</td><td>15</td></tr>
+  <tr><td style="background:#eef2ff"><strong>White / XL</strong></td><td>NIKE-DRFIT-WH-XL</td><td style="color:#6366f1"><strong>2,699</strong></td><td>8</td></tr>
+  <tr><td>Red / S</td><td>NIKE-DRFIT-RD-S</td><td>2,499</td><td>10</td></tr>
+  <tr><td>Red / M</td><td>NIKE-DRFIT-RD-M</td><td>2,499</td><td>15</td></tr>
+  <tr><td>Red / L</td><td>NIKE-DRFIT-RD-L</td><td>2,499</td><td>15</td></tr>
+  <tr><td style="background:#eef2ff"><strong>Red / XL</strong></td><td>NIKE-DRFIT-RD-XL</td><td style="color:#6366f1"><strong>2,699</strong></td><td>8</td></tr>
+</table>
+<blockquote><strong>Note:</strong> XL sizes cost &#8377;2,699 (&#8377;200 more) &mdash; each variant can have its own price.</blockquote>
+
+<h4>Step 8 &mdash; Add Product Images</h4>
+<p>Scroll down to the <strong>Images</strong> section (below Variants). Click <strong>"New Image"</strong> and add:</p>
+<table>
+  <tr><th>#</th><th>Image URL</th><th>Alt Text</th><th>Primary</th><th>Sort</th></tr>
+  <tr><td>1</td><td>https://yourdomain.com/storage/products/nike-tshirt-front.jpg</td><td>Nike Dri-FIT T-Shirt front view</td><td>ON</td><td>1</td></tr>
+  <tr><td>2</td><td>https://yourdomain.com/storage/products/nike-tshirt-back.jpg</td><td>Nike Dri-FIT T-Shirt back view</td><td>OFF</td><td>2</td></tr>
+  <tr><td>3</td><td>https://yourdomain.com/storage/products/nike-tshirt-detail.jpg</td><td>Nike Dri-FIT fabric close-up</td><td>OFF</td><td>3</td></tr>
+</table>
+
+<h4>Step 9 &mdash; Activate the Product</h4>
+<ol>
+  <li>Scroll back up to the <strong>"Status &amp; Visibility"</strong> tab (Tab 5)</li>
+  <li>Change <strong>Status</strong> from <code>Draft</code> to <strong><code>Active</code></strong></li>
+  <li>Toggle <strong>Is Featured</strong> to <strong>ON</strong> (if you want it on the homepage)</li>
+  <li>Click <strong>"Save changes"</strong></li>
+</ol>
+<p>Your product is now <strong>live on the storefront</strong> with all 16 variants!</p>
+
+<hr>
+
+<h3>More Variant Examples</h3>
+
+<p><strong>Example 2: Electronics &mdash; Samsung Galaxy S25 Ultra</strong></p>
+<pre>Path: Admin &gt; Products &gt; New Product
+
+Option 1: Color    &rarr; Titanium Black, Gray, Blue
+Option 2: Storage  &rarr; 256GB, 512GB, 1TB
+Result: 9 variants (3 &times; 3)
+
+Variant pricing:
+  Any Color / 256GB  &rarr; &#8377;89,999
+  Any Color / 512GB  &rarr; &#8377;99,999
+  Any Color / 1TB    &rarr; &#8377;1,19,999</pre>
+
+<p><strong>Example 3: Shoes &mdash; Nike Air Max 270</strong></p>
+<pre>Path: Admin &gt; Products &gt; New Product
+
+Option 1: Color  &rarr; Black/White, All Black, Blue/Gray
+Option 2: Size   &rarr; UK 7, UK 8, UK 9, UK 10, UK 11
+Result: 15 variants (3 &times; 5)
+
+All variants same price: &#8377;12,999</pre>
+
+<p><strong>Example 4: Furniture &mdash; 3 Options</strong></p>
+<pre>Path: Admin &gt; Products &gt; New Product
+
+Option 1: Color     &rarr; Walnut, Oak, White
+Option 2: Size      &rarr; Small, Medium, Large
+Option 3: Material  &rarr; Wood, MDF
+Result: 18 variants (3 &times; 3 &times; 2)</pre>
+
+<hr>
+
+<h3>Adding New Variant Values Later</h3>
+<p>If you need to add a new color or size after the product is already live:</p>
+<ol>
+  <li>Go to <strong>Admin &gt; Products</strong> &gt; click on the product</li>
+  <li>Go to <strong>Tab 4: Options &amp; Variants</strong></li>
+  <li>Add the new value (e.g., add <code>Green</code> to the Color option)</li>
+  <li>Click <strong>Save</strong></li>
+  <li>Scroll down to <strong>Variants</strong> section</li>
+  <li>Click <strong>"Generate Variants"</strong> again</li>
+</ol>
+<p>The system will <strong>only create new combinations</strong> (e.g., Green/S, Green/M, Green/L, Green/XL) without duplicating existing ones.</p>
+
+<h3>Disabling a Specific Variant</h3>
+<p>If a variant goes out of stock or is discontinued:</p>
+<ol>
+  <li>Go to the product edit page</li>
+  <li>Scroll to <strong>Variants</strong> section</li>
+  <li>Click the <strong>edit icon</strong> on the variant</li>
+  <li>Toggle <strong>Is Active</strong> to <strong>OFF</strong></li>
+  <li>Save</li>
+</ol>
+<p>The variant will be hidden from the storefront but remains in your records.</p>
+
+<h3>Visual Navigation Summary</h3>
+<pre>CREATING A PRODUCT WITH VARIANTS &mdash; Step by Step
+
+Sidebar &gt; Products &gt; "New Product"
+&#9474;
+&#9500;&#9472;&#9472; Tab 1: Basic Information
+&#9474;   &#9492;&#9472;&#9472; Name, SKU, Category, Brand, Description, Tags
+&#9474;
+&#9500;&#9472;&#9472; Tab 2: Pricing
+&#9474;   &#9492;&#9472;&#9472; Price, Compare at Price, Cost Price
+&#9474;
+&#9500;&#9472;&#9472; Tab 3: Inventory
+&#9474;   &#9492;&#9472;&#9472; Stock, Low Stock Threshold, Weight, Dimensions
+&#9474;
+&#9500;&#9472;&#9472; Tab 4: Options &amp; Variants  &larr; DEFINE OPTIONS HERE
+&#9474;   &#9492;&#9472;&#9472; Click "Add to options"
+&#9474;   &#9492;&#9472;&#9472; Option 1: Color &rarr; [Navy Blue] [Black] [White] [Red]
+&#9474;   &#9492;&#9472;&#9472; Click "Add to options"
+&#9474;   &#9492;&#9472;&#9472; Option 2: Size &rarr; [S] [M] [L] [XL]
+&#9474;
+&#9500;&#9472;&#9472; Tab 5: Status &amp; Visibility
+&#9474;   &#9492;&#9472;&#9472; Status: Draft &rarr; Click "Create" to SAVE
+&#9474;
+&#9500;&#9472;&#9472; Tab 6: SEO
+&#9474;   &#9492;&#9472;&#9472; Meta Title, Meta Description
+&#9474;
+&#9474;   &mdash;&mdash;&mdash;&mdash; AFTER SAVING, SCROLL DOWN &mdash;&mdash;&mdash;&mdash;
+&#9474;
+&#9500;&#9472;&#9472; Variants Section  &larr; GENERATE &amp; EDIT VARIANTS HERE
+&#9474;   &#9492;&#9472;&#9472; Click "Generate Variants" &rarr; Creates all combinations
+&#9474;   &#9492;&#9472;&#9472; Click edit icon on each &rarr; Set SKU, Price, Stock
+&#9474;
+&#9492;&#9472;&#9472; Images Section  &larr; ADD PRODUCT IMAGES HERE
+    &#9492;&#9472;&#9472; Click "New Image" &rarr; Add URL, Alt Text, set Primary</pre>
+
+<hr>
+
+<!-- 6. PRODUCT IMAGES -->
+<h2 id="images"><span class="section-badge">6</span> Product Images</h2>
+
+<p>After creating a product, add images from the <strong>Images</strong> section at the bottom of the product edit page.</p>
+
+<h3>Adding an Image</h3>
+<table>
+  <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+  <tr><td><strong>Image URL</strong></td><td>Yes</td><td>Full URL to the image file (e.g., <code>https://yourdomain.com/storage/products/phone-front.jpg</code>).</td></tr>
+  <tr><td><strong>Alt Text</strong></td><td>No</td><td>Description for accessibility and SEO (e.g., "Samsung Galaxy S25 front view").</td></tr>
+  <tr><td><strong>Sort Order</strong></td><td>No</td><td>Display order. Lower numbers appear first.</td></tr>
+  <tr><td><strong>Is Primary</strong></td><td>&mdash;</td><td>Toggle ON for the main product image. Only one should be primary.</td></tr>
+</table>
+
+<h3>Image Best Practices</h3>
+<ul>
+  <li>Upload images to your server's <code>/storage/products/</code> folder first, then use the URL.</li>
+  <li>Use <strong>square images</strong> (1:1 ratio) for consistent display &mdash; recommended size: <strong>800&times;800 pixels</strong>.</li>
+  <li>Add <strong>2&ndash;5 images</strong> per product (front, back, side, detail, lifestyle).</li>
+  <li>Always set <strong>one image as primary</strong> &mdash; this is the thumbnail shown in product listings.</li>
+  <li>Fill in <strong>Alt Text</strong> for better SEO and accessibility.</li>
+</ul>
+
+<hr>
+
+<!-- 7. ORDERS -->
+<h2 id="orders"><span class="section-badge">7</span> Managing Orders</h2>
+
+<p><strong>Navigate to:</strong> Admin &gt; Orders</p>
+
+<h3>Order Information</h3>
+<p>Each order contains:</p>
+<ul>
+  <li><strong>Order Number</strong> &mdash; Unique identifier (auto-generated)</li>
+  <li><strong>Customer</strong> &mdash; Name, email, and contact details</li>
+  <li><strong>Items</strong> &mdash; Products ordered with quantities and prices</li>
+  <li><strong>Status</strong> &mdash; Current order status</li>
+  <li><strong>Payment Status</strong> &mdash; Paid, pending, or failed</li>
+  <li><strong>Shipping Address</strong> &mdash; Delivery destination</li>
+  <li><strong>Order Total</strong> &mdash; Subtotal + shipping - discounts</li>
+</ul>
+
+<h3>Order Statuses</h3>
+<table>
+  <tr><th>Status</th><th>Description</th></tr>
+  <tr><td><strong>Pending</strong></td><td>Order placed, awaiting processing</td></tr>
+  <tr><td><strong>Processing</strong></td><td>Order confirmed and being prepared</td></tr>
+  <tr><td><strong>Shipped</strong></td><td>Order dispatched to customer</td></tr>
+  <tr><td><strong>Delivered</strong></td><td>Order successfully delivered</td></tr>
+  <tr><td><strong>Cancelled</strong></td><td>Order cancelled by customer or admin</td></tr>
+  <tr><td><strong>Refunded</strong></td><td>Payment returned to customer</td></tr>
+</table>
+
+<hr>
+
+<!-- 8. COUPONS -->
+<h2 id="coupons"><span class="section-badge">8</span> Managing Coupons</h2>
+
+<p>Create discount codes for your customers.</p>
+<p><strong>Navigate to:</strong> Admin &gt; Coupons &gt; <strong>New Coupon</strong></p>
+
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td><strong>Code</strong></td><td>Unique coupon code (e.g., "PICKKART10", "SUMMER25").</td></tr>
+  <tr><td><strong>Type</strong></td><td>Percentage discount or Fixed amount.</td></tr>
+  <tr><td><strong>Value</strong></td><td>Discount value (e.g., 10 for 10% or 500 for &#8377;500 off).</td></tr>
+  <tr><td><strong>Min Order Amount</strong></td><td>Minimum cart value required to use the coupon.</td></tr>
+  <tr><td><strong>Max Uses</strong></td><td>Total number of times the coupon can be used.</td></tr>
+  <tr><td><strong>Max Uses Per User</strong></td><td>Limit per customer.</td></tr>
+  <tr><td><strong>Start Date</strong></td><td>When the coupon becomes active.</td></tr>
+  <tr><td><strong>End Date</strong></td><td>When the coupon expires.</td></tr>
+  <tr><td><strong>Is Active</strong></td><td>Toggle ON/OFF.</td></tr>
+</table>
+
+<p><strong>Example Coupons:</strong></p>
+<table>
+  <tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Description</th></tr>
+  <tr><td>PICKKART10</td><td>Percentage</td><td>10%</td><td>&#8377;999</td><td>10% off on orders above &#8377;999</td></tr>
+  <tr><td>FLAT500</td><td>Fixed</td><td>&#8377;500</td><td>&#8377;2,999</td><td>&#8377;500 off on orders above &#8377;2,999</td></tr>
+  <tr><td>WELCOME20</td><td>Percentage</td><td>20%</td><td>&#8377;499</td><td>Welcome discount for new customers</td></tr>
+</table>
+
+<hr>
+
+<!-- 9. BANNERS -->
+<h2 id="banners"><span class="section-badge">9</span> Managing Banners</h2>
+
+<p>Banners appear on the homepage slider/hero section.</p>
+<p><strong>Navigate to:</strong> Admin &gt; Banners &gt; <strong>New Banner</strong></p>
+
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td><strong>Title</strong></td><td>Banner heading text.</td></tr>
+  <tr><td><strong>Subtitle</strong></td><td>Supporting text below the title.</td></tr>
+  <tr><td><strong>Image</strong></td><td>Banner image (recommended: 1920&times;600 pixels).</td></tr>
+  <tr><td><strong>Link</strong></td><td>URL when the banner is clicked (e.g., <code>/products?category=electronics</code>).</td></tr>
+  <tr><td><strong>Sort Order</strong></td><td>Display order in the slider.</td></tr>
+  <tr><td><strong>Is Active</strong></td><td>Toggle ON/OFF.</td></tr>
+</table>
+
+<hr>
+
+<!-- 10. PAGES -->
+<h2 id="pages"><span class="section-badge">10</span> Managing Pages</h2>
+
+<p>Create static pages like About Us, Privacy Policy, Terms &amp; Conditions, etc.</p>
+<p><strong>Navigate to:</strong> Admin &gt; Pages &gt; <strong>New Page</strong></p>
+
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td><strong>Title</strong></td><td>Page title (e.g., "About Us"). Slug is auto-generated.</td></tr>
+  <tr><td><strong>Slug</strong></td><td>URL path (e.g., <code>about-us</code> &rarr; yourdomain.com/pages/about-us).</td></tr>
+  <tr><td><strong>Content</strong></td><td>Rich text editor for page content.</td></tr>
+  <tr><td><strong>Meta Title</strong></td><td>SEO title.</td></tr>
+  <tr><td><strong>Meta Description</strong></td><td>SEO description.</td></tr>
+  <tr><td><strong>Is Active</strong></td><td>Toggle ON to publish.</td></tr>
+</table>
+
+<hr>
+
+<!-- 11. REVIEWS -->
+<h2 id="reviews"><span class="section-badge">11</span> Managing Reviews</h2>
+
+<p>Moderate customer reviews for products.</p>
+<p><strong>Navigate to:</strong> Admin &gt; Reviews</p>
+
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td><strong>Product</strong></td><td>The product being reviewed.</td></tr>
+  <tr><td><strong>Customer</strong></td><td>The reviewer.</td></tr>
+  <tr><td><strong>Rating</strong></td><td>1&ndash;5 stars.</td></tr>
+  <tr><td><strong>Comment</strong></td><td>Review text.</td></tr>
+  <tr><td><strong>Status</strong></td><td>Pending, Approved, or Rejected.</td></tr>
+</table>
+
+<blockquote>Only <strong>approved</strong> reviews are visible on the storefront.</blockquote>
+
+<hr>
+
+<!-- 12. USERS -->
+<h2 id="users"><span class="section-badge">12</span> Managing Users &amp; Roles</h2>
+
+<p><strong>Navigate to:</strong> Admin &gt; Users</p>
+
+<h3>User Roles</h3>
+<table>
+  <tr><th>Role</th><th>Access Level</th></tr>
+  <tr><td><strong>Super Admin</strong></td><td>Full access to everything. Can manage other admins.</td></tr>
+  <tr><td><strong>Admin</strong></td><td>Full admin panel access.</td></tr>
+  <tr><td><strong>Seller</strong></td><td>Can manage their own products and view their orders.</td></tr>
+  <tr><td><strong>Customer</strong></td><td>Storefront access only. Can place orders, write reviews.</td></tr>
+</table>
+
+<h3>Creating a User</h3>
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td><strong>Name</strong></td><td>Full name.</td></tr>
+  <tr><td><strong>Email</strong></td><td>Login email (must be unique).</td></tr>
+  <tr><td><strong>Password</strong></td><td>Account password.</td></tr>
+  <tr><td><strong>Role</strong></td><td>Select role: super-admin, admin, seller, or customer.</td></tr>
+</table>
+
+<hr>
+
+<!-- 13. SEO -->
+<h2 id="seo"><span class="section-badge">13</span> SEO Settings</h2>
+
+<p>PickKart has built-in SEO features for better search engine visibility.</p>
+
+<h3>What's Automatically Handled</h3>
+<ul>
+  <li><strong>Meta Tags</strong> &mdash; Open Graph (Facebook) and Twitter Card tags on every page.</li>
+  <li><strong>Canonical URLs</strong> &mdash; Prevents duplicate content issues.</li>
+  <li><strong>JSON-LD Structured Data</strong> &mdash; Product schema, Organization schema, BreadcrumbList.</li>
+  <li><strong>XML Sitemaps</strong> &mdash; Auto-generated at <code>/sitemap.xml</code> (products, categories, pages).</li>
+  <li><strong>robots.txt</strong> &mdash; Dynamic, served at <code>/robots.txt</code>.</li>
+</ul>
+
+<h3>Per-Page SEO Fields</h3>
+<p>Available on <strong>Products, Categories, and Pages</strong>:</p>
+<ul>
+  <li><strong>Meta Title</strong> &mdash; Keep it under 60 characters.</li>
+  <li><strong>Meta Description</strong> &mdash; Keep it under 160 characters.</li>
+</ul>
+
+<h3>SEO Tips</h3>
+<ol>
+  <li>Write unique meta titles and descriptions for every product.</li>
+  <li>Use descriptive <strong>Alt Text</strong> on all product images.</li>
+  <li>Create meaningful category descriptions.</li>
+  <li>Keep URLs clean (slugs are auto-generated from names).</li>
+  <li>Mark filtered/paginated listing pages as <code>noindex</code> (handled automatically).</li>
+</ol>
+
+<hr>
+
+<!-- 14. SETUP ORDER -->
+<h2 id="setup-order"><span class="section-badge">14</span> Recommended Setup Order</h2>
+
+<p>When setting up a new store, follow this order:</p>
+<pre>Step 1: Categories
+  &#9492;&#9472;&#9472; Create parent categories first
+  &#9492;&#9472;&#9472; Then create subcategories
+
+Step 2: Brands
+  &#9492;&#9472;&#9472; Add all your brands with logos
+
+Step 3: Products
+  &#9492;&#9472;&#9472; Create products (assign category + brand)
+  &#9492;&#9472;&#9472; Save the product
+  &#9492;&#9472;&#9472; Generate Variants (if applicable)
+  &#9492;&#9472;&#9472; Add Product Images
+  &#9492;&#9472;&#9472; Set status to "Active" when ready
+
+Step 4: Banners
+  &#9492;&#9472;&#9472; Add homepage banners with links to categories/products
+
+Step 5: Pages
+  &#9492;&#9472;&#9472; Create About Us, Privacy Policy, Terms, Contact pages
+
+Step 6: Coupons
+  &#9492;&#9472;&#9472; Create welcome/launch discount codes
+
+Step 7: Review &amp; Go Live
+  &#9492;&#9472;&#9472; Check all products are Active
+  &#9492;&#9472;&#9472; Verify images are loading
+  &#9492;&#9472;&#9472; Test a sample order
+  &#9492;&#9472;&#9472; Share your store!</pre>
+
+<hr>
+
+<h2>Quick Reference</h2>
+<table>
+  <tr><th>Action</th><th>Path</th></tr>
+  <tr><td>Create Category</td><td>Admin &gt; Categories &gt; New Category</td></tr>
+  <tr><td>Create Brand</td><td>Admin &gt; Brands &gt; New Brand</td></tr>
+  <tr><td>Create Product</td><td>Admin &gt; Products &gt; New Product</td></tr>
+  <tr><td>Create Coupon</td><td>Admin &gt; Coupons &gt; New Coupon</td></tr>
+  <tr><td>Manage Orders</td><td>Admin &gt; Orders</td></tr>
+  <tr><td>Create Banner</td><td>Admin &gt; Banners &gt; New Banner</td></tr>
+  <tr><td>Create Page</td><td>Admin &gt; Pages &gt; New Page</td></tr>
+  <tr><td>Manage Reviews</td><td>Admin &gt; Reviews</td></tr>
+  <tr><td>Manage Users</td><td>Admin &gt; Users</td></tr>
+</table>
+
+<hr>
+<p style="text-align:center; color: var(--text-light); font-size: 12px;"><em>PickKart Admin Guide &mdash; Last updated: February 2026</em></p>
+
+</body>
+</html>

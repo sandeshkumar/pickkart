@@ -16,16 +16,23 @@ class ImagesRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('path')
-                    ->label('Image URL')
+                Forms\Components\FileUpload::make('path')
+                    ->label('Product Image')
+                    ->image()
+                    ->directory('products')
+                    ->disk('public')
+                    ->imageResizeMode('cover')
+                    ->imageCropAspectRatio('1:1')
+                    ->imageResizeTargetWidth('800')
+                    ->imageResizeTargetHeight('800')
+                    ->maxSize(2048)
                     ->required()
-                    ->maxLength(500)
-                    ->url()
                     ->columnSpanFull(),
 
                 Forms\Components\TextInput::make('alt_text')
                     ->label('Alt Text')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->helperText('Describe the image for SEO and accessibility.'),
 
                 Forms\Components\TextInput::make('sort_order')
                     ->numeric()
@@ -34,7 +41,8 @@ class ImagesRelationManager extends RelationManager
 
                 Forms\Components\Toggle::make('is_primary')
                     ->label('Primary Image')
-                    ->default(false),
+                    ->default(false)
+                    ->helperText('Main image shown in product listings.'),
             ])
             ->columns(2);
     }
@@ -45,11 +53,14 @@ class ImagesRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\ImageColumn::make('path')
                     ->label('Image')
-                    ->size(60),
+                    ->disk('public')
+                    ->size(80)
+                    ->square(),
 
                 Tables\Columns\TextColumn::make('alt_text')
                     ->label('Alt Text')
-                    ->limit(30),
+                    ->limit(30)
+                    ->placeholder('No alt text'),
 
                 Tables\Columns\IconColumn::make('is_primary')
                     ->label('Primary')
@@ -63,7 +74,8 @@ class ImagesRelationManager extends RelationManager
             ->reorderable('sort_order')
             ->filters([])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Upload Image'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
