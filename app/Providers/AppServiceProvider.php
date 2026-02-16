@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Wishlist;
 use App\Services\CurrencyService;
 use Illuminate\Support\Facades\View;
@@ -36,7 +37,12 @@ class AppServiceProvider extends ServiceProvider
                 $cartCount = $cart ? (int) $cart->items()->sum('quantity') : 0;
             }
 
-            $view->with(compact('cartCount', 'wishlistCount'));
+            $navCategories = Category::active()->topLevel()
+                ->withCount('products')
+                ->orderBy('sort_order')
+                ->get();
+
+            $view->with(compact('cartCount', 'wishlistCount', 'navCategories'));
         });
     }
 }

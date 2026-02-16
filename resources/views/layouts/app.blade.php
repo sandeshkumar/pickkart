@@ -350,126 +350,27 @@
                              x-transition:leave-start="opacity-100 translate-y-0"
                              x-transition:leave-end="opacity-0 translate-y-1"
                              class="absolute left-0 mt-0 w-[720px] bg-white rounded-b-lg shadow-xl border border-gray-100 z-50">
+                            @php
+                                $colors = ['blue', 'pink', 'green', 'purple', 'orange', 'yellow', 'red', 'indigo', 'lime', 'amber', 'teal', 'rose'];
+                                $columns = $navCategories->split(3);
+                            @endphp
                             <div class="grid grid-cols-3 gap-0 p-6">
-                                {{-- Column 1 --}}
+                                @foreach($columns as $colIndex => $columnCategories)
                                 <div class="space-y-4">
-                                    <a href="{{ url('/products?category=electronics') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Electronics</p>
-                                            <p class="text-xs text-gray-500">Laptops, Phones, Gadgets</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=fashion') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Fashion</p>
-                                            <p class="text-xs text-gray-500">Clothing, Shoes, Accessories</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=home-garden') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Home & Garden</p>
-                                            <p class="text-xs text-gray-500">Furniture, Decor, Kitchen</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=beauty') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Beauty & Health</p>
-                                            <p class="text-xs text-gray-500">Skincare, Makeup, Wellness</p>
-                                        </div>
-                                    </a>
+                                    @foreach($columnCategories as $cat)
+                                        @php $color = $colors[$loop->parent->index * 4 + $loop->index % count($colors)] ?? 'blue'; @endphp
+                                        <a href="{{ url('/products?category=' . $cat->slug) }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
+                                            <div class="w-10 h-10 bg-{{ $color }}-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-5 h-5 text-{{ $color }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">{{ $cat->name }}</p>
+                                                <p class="text-xs text-gray-500">{{ $cat->products_count }} {{ Str::plural('product', $cat->products_count) }}</p>
+                                            </div>
+                                        </a>
+                                    @endforeach
                                 </div>
-
-                                {{-- Column 2 --}}
-                                <div class="space-y-4">
-                                    <a href="{{ url('/products?category=sports') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Sports & Outdoors</p>
-                                            <p class="text-xs text-gray-500">Fitness, Camping, Gear</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=toys') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Toys & Games</p>
-                                            <p class="text-xs text-gray-500">Kids, Board Games, Puzzles</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=automotive') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 5h8m-4-10v2m0 12v2m8-10h2M4 12H2m15.364-6.364l1.414-1.414M6.636 17.364l-1.414 1.414m12.142 0l1.414-1.414M6.636 6.636L5.222 5.222"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Automotive</p>
-                                            <p class="text-xs text-gray-500">Parts, Accessories, Tools</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=books') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Books & Media</p>
-                                            <p class="text-xs text-gray-500">Books, Music, Movies</p>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                {{-- Column 3 --}}
-                                <div class="space-y-4">
-                                    <a href="{{ url('/products?category=groceries') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-lime-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-lime-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Groceries</p>
-                                            <p class="text-xs text-gray-500">Food, Beverages, Essentials</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=pet-supplies') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Pet Supplies</p>
-                                            <p class="text-xs text-gray-500">Food, Toys, Accessories</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=baby-kids') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Baby & Kids</p>
-                                            <p class="text-xs text-gray-500">Clothing, Toys, Care</p>
-                                        </div>
-                                    </a>
-                                    <a href="{{ url('/products?category=jewelry') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-50 group">
-                                        <div class="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-800 group-hover:text-primary-600">Jewelry & Watches</p>
-                                            <p class="text-xs text-gray-500">Rings, Necklaces, Watches</p>
-                                        </div>
-                                    </a>
-                                </div>
+                                @endforeach
                             </div>
                             <div class="border-t border-gray-100 p-4 bg-gray-50 rounded-b-lg">
                                 <a href="{{ url('/products') }}" class="text-sm text-primary-600 font-medium hover:text-primary-800">View All Categories &rarr;</a>
@@ -548,18 +449,9 @@
 
                     <div class="border-t border-gray-100 pt-3 mt-3">
                         <p class="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Categories</p>
-                        <a href="{{ url('/products?category=electronics') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Electronics</a>
-                        <a href="{{ url('/products?category=fashion') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Fashion</a>
-                        <a href="{{ url('/products?category=home-garden') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Home & Garden</a>
-                        <a href="{{ url('/products?category=beauty') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Beauty & Health</a>
-                        <a href="{{ url('/products?category=sports') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Sports & Outdoors</a>
-                        <a href="{{ url('/products?category=toys') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Toys & Games</a>
-                        <a href="{{ url('/products?category=automotive') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Automotive</a>
-                        <a href="{{ url('/products?category=books') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Books & Media</a>
-                        <a href="{{ url('/products?category=groceries') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Groceries</a>
-                        <a href="{{ url('/products?category=pet-supplies') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Pet Supplies</a>
-                        <a href="{{ url('/products?category=baby-kids') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Baby & Kids</a>
-                        <a href="{{ url('/products?category=jewelry') }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">Jewelry & Watches</a>
+                        @foreach($navCategories as $cat)
+                            <a href="{{ url('/products?category=' . $cat->slug) }}" class="block px-3 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600 rounded-lg">{{ $cat->name }}</a>
+                        @endforeach
                     </div>
 
                     {{-- Account Links --}}
@@ -601,38 +493,6 @@
         @yield('content')
     </main>
 
-    {{-- Newsletter Banner --}}
-    <section class="bg-gradient-to-br from-primary-800 via-primary-700 to-accent-700 py-10 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h3 class="text-xl font-bold text-white mb-2">Stay in the Loop</h3>
-            <p class="text-primary-200 text-sm mb-6">Subscribe to our newsletter and get exclusive deals, new arrivals, and insider-only discounts delivered to your inbox.</p>
-            <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                  x-data="{ subscribed: false, email: '', error: '' }"
-                  @submit.prevent="
-                      error = '';
-                      fetch('{{ route('newsletter.subscribe') }}', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
-                          body: JSON.stringify({ email: email })
-                      })
-                      .then(r => r.json())
-                      .then(data => { if (data.success) { subscribed = true; } else { error = data.message || 'Something went wrong.'; } })
-                      .catch(() => { error = 'Something went wrong. Please try again.'; });
-                  ">
-                <div class="flex-1">
-                    <input type="email" required placeholder="Enter your email address" :disabled="subscribed" x-model="email"
-                           class="w-full px-4 py-3 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50">
-                    <p x-show="error" x-text="error" class="text-xs text-red-200 mt-1 text-left"></p>
-                </div>
-                <button type="submit" x-show="!subscribed" class="btn-gradient-orange font-heading font-semibold px-6 py-3 rounded-lg text-sm">Subscribe</button>
-                <span x-show="subscribed" x-cloak class="bg-green-500 text-white font-semibold px-6 py-3 rounded-lg text-sm inline-flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    Subscribed!
-                </span>
-            </form>
-        </div>
-    </section>
-
     {{-- Footer --}}
     <footer class="bg-gray-900 text-gray-300">
         {{-- Main Footer --}}
@@ -666,12 +526,9 @@
                 <div>
                     <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Categories</h3>
                     <ul class="space-y-2">
-                        <li><a href="{{ url('/products?category=electronics') }}" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Electronics</a></li>
-                        <li><a href="{{ url('/products?category=fashion') }}" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Fashion</a></li>
-                        <li><a href="{{ url('/products?category=home-garden') }}" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Home & Garden</a></li>
-                        <li><a href="{{ url('/products?category=beauty') }}" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Beauty & Health</a></li>
-                        <li><a href="{{ url('/products?category=sports') }}" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Sports & Outdoors</a></li>
-                        <li><a href="{{ url('/products?category=books') }}" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Books & Media</a></li>
+                        @foreach($navCategories->take(6) as $cat)
+                            <li><a href="{{ url('/products?category=' . $cat->slug) }}" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">{{ $cat->name }}</a></li>
+                        @endforeach
                     </ul>
                 </div>
 
