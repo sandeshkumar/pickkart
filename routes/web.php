@@ -163,12 +163,17 @@ Route::get('/sitemap/pages.xml', [SitemapController::class, 'pages'])->name('sit
 
 Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
 
-// Temporary route — clear caches & re-seed pages (DELETE after use)
+// Temporary route — clear caches & update contact page (DELETE after use)
 Route::get('/clear-cache-seed-m8p2q', function () {
     Artisan::call('view:clear');
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
     Artisan::call('config:clear');
-    Artisan::call('db:seed', ['--class' => 'DatabaseSeeder', '--force' => true]);
-    return '<pre>All caches cleared & DatabaseSeeder executed.</pre>';
+
+    // Remove phone from contact-us CMS page and update hours
+    \DB::table('pages')->where('slug', 'contact-us')->update([
+        'content' => \DB::raw("REPLACE(REPLACE(content, 'Phone: +1 (800) 555-ZEDK (9335)<br>\n', ''), 'Monday to Saturday', 'Monday to Sunday')")
+    ]);
+
+    return '<pre>All caches cleared & contact page updated.</pre>';
 });
