@@ -157,19 +157,6 @@ Route::get('/sitemap/pages.xml', [SitemapController::class, 'pages'])->name('sit
 
 /*
 |--------------------------------------------------------------------------
-| Temporary: Run seeder & clear cache via browser (REMOVE AFTER USE)
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/run-seed-pages-x7k9m', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('view:clear');
-    Artisan::call('db:seed', ['--class' => 'Database\\Seeders\\PageSeeder', '--force' => true]);
-    return 'Done! Caches cleared & PageSeeder executed. Now delete this route.';
-});
-
-/*
-|--------------------------------------------------------------------------
 | CMS Pages (catch-all, must be last)
 |--------------------------------------------------------------------------
 */
