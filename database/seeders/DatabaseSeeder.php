@@ -715,7 +715,7 @@ class DatabaseSeeder extends Seeder
                 'content' => '<h2>Get in Touch</h2>
 <p>We would love to hear from you. Whether you have a question about a product, need help with an order, or want to share feedback, our team is here to help.</p>
 <h3>Customer Support</h3>
-<p>Email: <a href="mailto:support@pickkart.com">support@pickkart.com</a><br>
+<p>Email: <a href="mailto:support@pickkart.co.in">support@pickkart.co.in</a><br>
 Phone: +1 (800) 555-ZEDK (9335)<br>
 Hours: Monday to Saturday, 9:00 AM - 6:00 PM IST</p>
 <h3>Seller Support</h3>

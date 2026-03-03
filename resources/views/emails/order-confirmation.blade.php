@@ -132,7 +132,7 @@
                     <tr>
                         <td style="background-color:#f9fafb; padding:24px 32px; text-align:center; border-top:1px solid #e5e7eb;">
                             <p style="margin:0 0 8px; color:#6b7280; font-size:13px;">
-                                If you have any questions about your order, please contact us at support@pickkart.com
+                                If you have any questions about your order, please contact us at support@pickkart.co.in
                             </p>
                             <p style="margin:0; color:#9ca3af; font-size:12px;">
                                 &copy; {{ date('Y') }} PickKart. All rights reserved.

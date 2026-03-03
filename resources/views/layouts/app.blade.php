@@ -160,7 +160,7 @@
             "@type": "ContactPoint",
             "telephone": "+1-555-123-4567",
             "contactType": "customer service",
-            "email": "support@pickkart.com",
+            "email": "support@pickkart.co.in",
             "availableLanguage": "English"
         }
     }
