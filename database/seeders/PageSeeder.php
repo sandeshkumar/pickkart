@@ -13,16 +13,16 @@ class PageSeeder extends Seeder
             [
                 'title' => 'About Us',
                 'slug' => 'about-us',
-                'meta_title' => 'About Us - PickKart | Shivam Technologies',
-                'meta_description' => 'Learn about PickKart by Shivam Technologies - your trusted online shopping destination for quality products at great prices.',
+                'meta_title' => 'About Us - PickKart | MAHALAXMI',
+                'meta_description' => 'Learn about PickKart by MAHALAXMI - your trusted online shopping destination for quality products at great prices.',
                 'is_active' => true,
                 'content' => <<<'HTML'
 <h2>Welcome to PickKart</h2>
-<p><strong>PickKart</strong> is an initiative by <strong>Shivam Technologies</strong>, a forward-thinking technology company committed to making online shopping accessible, affordable, and delightful for everyone across India.</p>
+<p><strong>PickKart</strong> is an initiative by <strong>MAHALAXMI</strong>, a forward-thinking technology company committed to making online shopping accessible, affordable, and delightful for everyone across India.</p>
 
 <h3>Our Story</h3>
 <p>Founded with a simple vision — to bring quality products to every doorstep at fair prices — PickKart was born out of the belief that online shopping should be easy, trustworthy, and enjoyable. What started as a small venture has grown into a full-fledged e-commerce platform serving customers across India.</p>
-<p>At Shivam Technologies, we combine our expertise in software development and digital innovation to build platforms that truly serve people. PickKart is our flagship e-commerce brand, and we pour our passion for technology and customer satisfaction into every aspect of the experience.</p>
+<p>At MAHALAXMI, we combine our expertise in software development and digital innovation to build platforms that truly serve people. PickKart is our flagship e-commerce brand, and we pour our passion for technology and customer satisfaction into every aspect of the experience.</p>
 
 <h3>What We Offer</h3>
 <ul>
@@ -45,8 +45,8 @@ class PageSeeder extends Seeder
     <li><strong>Community</strong> — We support local sellers and Indian brands, helping them reach customers nationwide.</li>
 </ul>
 
-<h3>About Shivam Technologies</h3>
-<p><strong>Shivam Technologies</strong> is a technology company specializing in web development, mobile applications, and e-commerce solutions. With a team of skilled developers and designers, we build digital products that solve real-world problems. PickKart is our consumer-facing brand that showcases our commitment to building technology that serves people.</p>
+<h3>About MAHALAXMI</h3>
+<p><strong>MAHALAXMI</strong> is a technology company specializing in web development, mobile applications, and e-commerce solutions. With a team of skilled developers and designers, we build digital products that solve real-world problems. PickKart is our consumer-facing brand that showcases our commitment to building technology that serves people.</p>
 
 <h3>Get in Touch</h3>
 <p>We'd love to hear from you! Whether you have a question, suggestion, or just want to say hello:</p>
@@ -65,7 +65,7 @@ HTML,
                 'is_active' => true,
                 'content' => <<<'HTML'
 <p><em>Last updated: February 2026</em></p>
-<p>At <strong>PickKart</strong> (operated by <strong>Shivam Technologies</strong>), we strive to deliver your orders quickly, safely, and affordably. Please read our shipping policy below.</p>
+<p>At <strong>PickKart</strong> (operated by <strong>MAHALAXMI</strong>), we strive to deliver your orders quickly, safely, and affordably. Please read our shipping policy below.</p>
 
 <h3>1. Shipping Coverage</h3>
 <p>We currently ship to all serviceable pin codes across India. During checkout, you can verify if delivery is available to your area by entering your pin code.</p>
@@ -145,7 +145,7 @@ HTML,
                 'is_active' => true,
                 'content' => <<<'HTML'
 <p><em>Last updated: February 2026</em></p>
-<p>At <strong>PickKart</strong> (operated by <strong>Shivam Technologies</strong>), customer satisfaction is our top priority. If you're not completely happy with your purchase, we're here to help.</p>
+<p>At <strong>PickKart</strong> (operated by <strong>MAHALAXMI</strong>), customer satisfaction is our top priority. If you're not completely happy with your purchase, we're here to help.</p>
 
 <h3>1. Return Policy Overview</h3>
 <ul>
@@ -232,7 +232,7 @@ HTML,
                 'is_active' => true,
                 'content' => <<<'HTML'
 <p><em>Last updated: February 2026</em></p>
-<p><strong>Shivam Technologies</strong> ("we", "us", "our") operates the <strong>PickKart</strong> website at <a href="https://pickkart.co.in">pickkart.co.in</a> ("the Site"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our Site and make purchases.</p>
+<p><strong>MAHALAXMI</strong> ("we", "us", "our") operates the <strong>PickKart</strong> website at <a href="https://pickkart.co.in">pickkart.co.in</a> ("the Site"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our Site and make purchases.</p>
 
 <h3>1. Information We Collect</h3>
 <h4>Personal Information</h4>
@@ -320,7 +320,7 @@ HTML,
 <h3>10. Contact Us</h3>
 <p>If you have questions about this Privacy Policy or your personal data:</p>
 <ul>
-    <li><strong>Company:</strong> Shivam Technologies</li>
+    <li><strong>Company:</strong> MAHALAXMI</li>
     <li><strong>Email:</strong> support@pickkart.co.in</li>
     <li><strong>Website:</strong> <a href="https://pickkart.co.in">pickkart.co.in</a></li>
 </ul>
@@ -334,12 +334,12 @@ HTML,
                 'is_active' => true,
                 'content' => <<<'HTML'
 <p><em>Last updated: February 2026</em></p>
-<p>Welcome to <strong>PickKart</strong> (<a href="https://pickkart.co.in">pickkart.co.in</a>), operated by <strong>Shivam Technologies</strong>. By accessing or using our website, you agree to be bound by these Terms and Conditions. Please read them carefully.</p>
+<p>Welcome to <strong>PickKart</strong> (<a href="https://pickkart.co.in">pickkart.co.in</a>), operated by <strong>MAHALAXMI</strong>. By accessing or using our website, you agree to be bound by these Terms and Conditions. Please read them carefully.</p>
 
 <h3>1. Definitions</h3>
 <ul>
     <li><strong>"Site"</strong> refers to the PickKart website at pickkart.co.in</li>
-    <li><strong>"We", "Us", "Our"</strong> refers to Shivam Technologies</li>
+    <li><strong>"We", "Us", "Our"</strong> refers to MAHALAXMI</li>
     <li><strong>"User", "You", "Your"</strong> refers to any person accessing or using the Site</li>
     <li><strong>"Products"</strong> refers to goods available for purchase on the Site</li>
 </ul>
@@ -387,9 +387,9 @@ HTML,
 
 <h3>8. Intellectual Property</h3>
 <ul>
-    <li>All content on the Site — including logos, text, images, graphics, and software — is the property of Shivam Technologies or its licensors</li>
+    <li>All content on the Site — including logos, text, images, graphics, and software — is the property of MAHALAXMI or its licensors</li>
     <li>You may not reproduce, distribute, or create derivative works from our content without written permission</li>
-    <li>The "PickKart" name and logo are trademarks of Shivam Technologies</li>
+    <li>The "PickKart" name and logo are trademarks of MAHALAXMI</li>
 </ul>
 
 <h3>9. Reviews and User Content</h3>
@@ -401,13 +401,13 @@ HTML,
 
 <h3>10. Limitation of Liability</h3>
 <ul>
-    <li>PickKart and Shivam Technologies shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Site</li>
+    <li>PickKart and MAHALAXMI shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Site</li>
     <li>Our total liability for any claim shall not exceed the amount paid by you for the specific product or service in question</li>
     <li>We are not responsible for delays or failures caused by events beyond our reasonable control (force majeure)</li>
 </ul>
 
 <h3>11. Indemnification</h3>
-<p>You agree to indemnify and hold harmless Shivam Technologies, its officers, employees, and partners from any claims, damages, or expenses arising from your use of the Site or violation of these Terms.</p>
+<p>You agree to indemnify and hold harmless MAHALAXMI, its officers, employees, and partners from any claims, damages, or expenses arising from your use of the Site or violation of these Terms.</p>
 
 <h3>12. Governing Law</h3>
 <p>These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts in India.</p>
@@ -421,7 +421,7 @@ HTML,
 <h3>15. Contact Us</h3>
 <p>For questions about these Terms and Conditions:</p>
 <ul>
-    <li><strong>Company:</strong> Shivam Technologies</li>
+    <li><strong>Company:</strong> MAHALAXMI</li>
     <li><strong>Email:</strong> support@pickkart.co.in</li>
     <li><strong>Website:</strong> <a href="https://pickkart.co.in">pickkart.co.in</a></li>
 </ul>
