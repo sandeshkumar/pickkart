@@ -158,7 +158,6 @@
         "logo": "{{ asset('images/logo.png') }}",
         "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "+1-555-123-4567",
             "contactType": "customer service",
             "email": "support@pickkart.co.in",
             "availableLanguage": "English"

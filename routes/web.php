@@ -162,3 +162,13 @@ Route::get('/sitemap/pages.xml', [SitemapController::class, 'pages'])->name('sit
 */
 
 Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
+
+// Temporary route — clear caches & re-seed pages (DELETE after use)
+Route::get('/clear-cache-seed-m8p2q', function () {
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('db:seed', ['--class' => 'DatabaseSeeder', '--force' => true]);
+    return '<pre>All caches cleared & DatabaseSeeder executed.</pre>';
+});
